@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2858384414607014094}
   - component: {fileID: 9109319956618733759}
   - component: {fileID: 4407875325680315496}
+  - component: {fileID: 6419264410489319027}
   m_Layer: 5
   m_Name: Pawn
   m_TagString: Untagged
@@ -92,3 +93,15 @@ MonoBehaviour:
   m_EffectColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
+--- !u!114 &6419264410489319027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3214704548652560455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8db4d2dea0053a4082b28741532c3eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

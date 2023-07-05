@@ -31,7 +31,7 @@ RectTransform:
   m_Children:
   - {fileID: 6405390522434879274}
   - {fileID: 2692216029945121036}
-  - {fileID: 5273911517648919723}
+  - {fileID: 2305921885453618401}
   - {fileID: 7825625641016011249}
   m_Father: {fileID: 2625190124397570680}
   m_RootOrder: -1
@@ -153,6 +153,7 @@ GameObject:
   - component: {fileID: 2625190124397570680}
   - component: {fileID: 1580111434886962810}
   - component: {fileID: 899935649377938714}
+  - component: {fileID: 1440986703161940700}
   m_Layer: 5
   m_Name: Edge
   m_TagString: Untagged
@@ -221,6 +222,24 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1440986703161940700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3379124165374574662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd8e30b32c1e8644eaa7f33c12a0f955, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  centerSlot: {fileID: 6541589592773716769}
+  slots:
+  - {fileID: 6405390522434879274}
+  - {fileID: 2692216029945121036}
+  - {fileID: 2305921885453618401}
+  - {fileID: 7825625641016011249}
 --- !u!1 &7044545477675274048
 GameObject:
   m_ObjectHideFlags: 0
@@ -1086,7 +1105,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 66969de2d8a036945bbb5b03c043074e, type: 3}
---- !u!224 &5273911517648919723 stripped
+--- !u!224 &2305921885453618401 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7579827733401505867, guid: 66969de2d8a036945bbb5b03c043074e, type: 3}
   m_PrefabInstance: {fileID: 5273911517648919722}
