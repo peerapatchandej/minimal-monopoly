@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7378753996882428516}
   - component: {fileID: 1096891267475672801}
   - component: {fileID: 6070731468331505612}
+  - component: {fileID: 1374349075192982473}
   m_Layer: 5
   m_Name: Corner
   m_TagString: Untagged
@@ -78,6 +79,24 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1374349075192982473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3169095432978605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd8e30b32c1e8644eaa7f33c12a0f955, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  centerSlot: {fileID: 1291910757306874249}
+  slots:
+  - {fileID: 4288232633193985816}
+  - {fileID: 3051756397232375825}
+  - {fileID: 5685368772086097525}
+  - {fileID: 2844905597042003542}
 --- !u!1 &5159198007481035782
 GameObject:
   m_ObjectHideFlags: 0
@@ -108,9 +127,9 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4288232633193985816}
-  - {fileID: 4857960610505349211}
+  - {fileID: 3051756397232375825}
   - {fileID: 5685368772086097525}
-  - {fileID: 5641840146693791262}
+  - {fileID: 2844905597042003542}
   m_Father: {fileID: 7378753996882428516}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -350,7 +369,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 66969de2d8a036945bbb5b03c043074e, type: 3}
---- !u!224 &4857960610505349211 stripped
+--- !u!224 &3051756397232375825 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7579827733401505867, guid: 66969de2d8a036945bbb5b03c043074e, type: 3}
   m_PrefabInstance: {fileID: 4857960610505349210}
@@ -456,7 +475,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 66969de2d8a036945bbb5b03c043074e, type: 3}
---- !u!224 &5641840146693791262 stripped
+--- !u!224 &2844905597042003542 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7579827733401505867, guid: 66969de2d8a036945bbb5b03c043074e, type: 3}
   m_PrefabInstance: {fileID: 5641840146693791261}
