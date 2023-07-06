@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using System;
 
 public class Monopoly : MonoBehaviour
 {
@@ -11,27 +12,69 @@ public class Monopoly : MonoBehaviour
   [SerializeField]
   private BoardController boardCtrl = default;
 
+  private int diceResult;
+
   private IEnumerator Start()
   {
+    playerCtrl.Setup(0);
+    playerCtrl.originIndex = 0;
+    playerCtrl.ownedSlot = 4; //center;
+
     yield return new WaitForSeconds(1f);
 
-    MoveNextSlot();
+    diceResult = 21;
+    bool complete = false;
 
-    yield return new WaitForSeconds(2f);
+    //Clear old owned slot
+    BoardSlot boardSlot = boardCtrl.GetBoardSlot(playerCtrl.originIndex);
+    boardSlot.SetOwnedSlot(playerCtrl.ownedSlot, false);
 
-    MoveSwapInSlot();
+    while (diceResult > 0)
+    {
+      MoveNextSlot(() =>
+      {
+        complete = true;
+        diceResult--;
+      });
+
+      yield return new WaitUntil(() => complete == true);
+
+      complete = false;
+    }
   }
 
-  private void MoveNextSlot()
+  private void MoveNextSlot(Action onComplete = null)
   {
     int nextIndex = playerCtrl.currentIndex + 1;
+
+    if (nextIndex >= boardCtrl.GetBoardSlotCount())
+    {
+      nextIndex = playerCtrl.originIndex;
+    }
+
     BoardSlot boardSlot = boardCtrl.GetBoardSlot(nextIndex);
-    playerCtrl.Move(nextIndex, boardSlot.GetSlotPosition());
+    BoardSlot.SlotData slotData = boardSlot.GetSlotData();
+    playerCtrl.Move(nextIndex, slotData.Position, () =>
+    {
+      onComplete?.Invoke();
+      if (diceResult == 0)
+      {
+        playerCtrl.originIndex = playerCtrl.currentIndex;
+        playerCtrl.ownedSlot = (int)slotData.SlotType;
+
+        BoardSlot boardSlot = boardCtrl.GetBoardSlot(playerCtrl.originIndex);
+        boardSlot.SetOwnedSlot(playerCtrl.ownedSlot, true);
+
+        Debug.Log($"originIndex : {playerCtrl.originIndex}");
+        Debug.Log($"ownedSlot : {playerCtrl.ownedSlot}");
+      }
+    });
   }
 
-  private void MoveSwapInSlot()
+  private void MoveSwapInSlot(Action onComplete = null)
   {
     BoardSlot boardSlot = boardCtrl.GetBoardSlot(playerCtrl.currentIndex);
-    playerCtrl.Move(playerCtrl.currentIndex, boardSlot.GetSlotPosition());
+    BoardSlot.SlotData slotData = boardSlot.GetSlotData();
+    playerCtrl.Move(playerCtrl.currentIndex, slotData.Position, onComplete);
   }
 }

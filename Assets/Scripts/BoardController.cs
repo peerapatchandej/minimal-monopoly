@@ -12,4 +12,9 @@ public class BoardController : MonoBehaviour
   {
     return boardSlots[index];
   }
+
+  public int GetBoardSlotCount()
+  {
+    return boardSlots.Length;
+  }
 }

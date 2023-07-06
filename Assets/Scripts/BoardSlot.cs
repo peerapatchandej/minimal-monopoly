@@ -4,6 +4,21 @@ using UnityEngine;
 
 public class BoardSlot : MonoBehaviour
 {
+  public struct SlotData
+  {
+    public Vector2 Position;
+    public SlotType SlotType;
+  }
+
+  public enum SlotType
+  {
+    One = 0,
+    Two,
+    Three,
+    Four,
+    Center
+  }
+
   [SerializeField]
   private Transform centerSlot = default;
 
@@ -13,12 +28,12 @@ public class BoardSlot : MonoBehaviour
   private bool ownedCenterSlot = false;
   private bool[] ownedSlot = new bool[] { false, false, false, false };
 
-  public Vector2 GetSlotPosition()
+  public SlotData GetSlotData()
   {
     if (!ownedCenterSlot && !ownedSlot[0])
     {
-      ownedCenterSlot = true;
-      return centerSlot.position;
+      //ownedCenterSlot = true;
+      return new SlotData { Position = centerSlot.position, SlotType = SlotType.Center };
     }
     else
     {
@@ -26,12 +41,18 @@ public class BoardSlot : MonoBehaviour
       {
         if (!ownedSlot[i])
         {
-          ownedSlot[i] = true;
-          return slots[i].position;
+          //ownedSlot[i] = true;
+          return new SlotData { Position = slots[i].position, SlotType = (SlotType)i };
         }
       }
     }
 
     return default;
+  }
+
+  public void SetOwnedSlot(int type, bool value)
+  {
+    if ((SlotType)type == SlotType.Center) ownedCenterSlot = value;
+    else ownedSlot[type] = value;
   }
 }
