@@ -7,49 +7,71 @@ using System;
 public class Monopoly : MonoBehaviour
 {
   [SerializeField]
-  private PlayerController playerCtrl = default; //prototype ของจริงจะเป็น array
+  private PlayerController[] playerCtrls = default; //prototype ของจริงจะเป็น array
 
   [SerializeField]
   private BoardController boardCtrl = default;
 
   private int diceResult;
+  private bool moveNextComplete = false;
 
   private IEnumerator Start()
   {
-    playerCtrl.Setup(0);
-    playerCtrl.originIndex = 0;
-    playerCtrl.ownedSlot = 4; //center;
+    playerCtrls[0].Setup(0);
+    playerCtrls[1].Setup(5);
 
     yield return new WaitForSeconds(1f);
 
-    diceResult = 21;
-    bool complete = false;
+    diceResult = 1;
 
     //Clear old owned slot
-    BoardSlot boardSlot = boardCtrl.GetBoardSlot(playerCtrl.originIndex);
-    boardSlot.SetOwnedSlot(playerCtrl.ownedSlot, false);
+    BoardSlot boardSlot = boardCtrl.GetBoardSlot(playerCtrls[0].originIndex);
+    boardSlot.SetOwnedSlot(playerCtrls[0].ownedSlot, false);
 
     while (diceResult > 0)
     {
-      MoveNextSlot(() =>
+      MoveNextSlot(playerCtrls[0], () =>
       {
-        complete = true;
+        moveNextComplete = true;
         diceResult--;
       });
 
-      yield return new WaitUntil(() => complete == true);
+      yield return new WaitUntil(() => moveNextComplete == true);
 
-      complete = false;
+      moveNextComplete = false;
+    }
+
+    //=======================================================================
+
+    diceResult = 16;
+
+    //Clear old owned slot
+    boardSlot = boardCtrl.GetBoardSlot(playerCtrls[1].originIndex);
+    boardSlot.SetOwnedSlot(playerCtrls[1].ownedSlot, false);
+
+    while (diceResult > 0)
+    {
+      MoveNextSlot(playerCtrls[1], () =>
+      {
+        moveNextComplete = true;
+        diceResult--;
+      });
+
+      yield return new WaitUntil(() => moveNextComplete == true);
+
+      moveNextComplete = false;
     }
   }
 
-  private void MoveNextSlot(Action onComplete = null)
+  private void MoveNextSlot(PlayerController playerCtrl, Action onComplete = null)
   {
+    //ก่อนทีจะ move ต้องเช็ค player ในช่องก่อนหน้าก่อนว่ามีมั้ย ถ้ามีก็ให้ player ในช่องนั้น swap in slot
+
     int nextIndex = playerCtrl.currentIndex + 1;
 
     if (nextIndex >= boardCtrl.GetBoardSlotCount())
     {
-      nextIndex = playerCtrl.originIndex;
+      nextIndex = 0;
     }
 
     BoardSlot boardSlot = boardCtrl.GetBoardSlot(nextIndex);
@@ -71,7 +93,7 @@ public class Monopoly : MonoBehaviour
     });
   }
 
-  private void MoveSwapInSlot(Action onComplete = null)
+  private void MoveSwapInSlot(PlayerController playerCtrl, Action onComplete = null)
   {
     BoardSlot boardSlot = boardCtrl.GetBoardSlot(playerCtrl.currentIndex);
     BoardSlot.SlotData slotData = boardSlot.GetSlotData();
