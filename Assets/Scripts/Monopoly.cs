@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System;
+using System.Linq;
 
 public class Monopoly : MonoBehaviour
 {
@@ -12,12 +13,83 @@ public class Monopoly : MonoBehaviour
   [SerializeField]
   private BoardController boardCtrl = default;
 
-  private int playerTurn;
-  private int diceResult;
+  [SerializeField]
+  private CenterArea centerArea = default;
+
+  private int playerTurn = -1;
+  private int diceResult = 0;
   private bool moveNextComplete = false;
+
+  private void RollDice(Action<int> callback)
+  {
+    if (centerArea) centerArea.EnableDicePage(callback);
+  }
+
+  private IEnumerator SetFirstPlayer()
+  {
+    int count = 0;
+    int mostDiceIndex = 0;
+    bool complete = false;
+
+    //order by red blue yellow green [Animation]
+    while (count < playerCtrls.Length)
+    {
+      complete = false;
+
+      RollDice((result) =>
+      {
+        Debug.Log("Result : " + result);
+
+        if (diceResult < result)
+        {
+          diceResult = result;
+          mostDiceIndex = count;
+        }
+
+        count++;
+        complete = true;
+      });
+
+      yield return new WaitUntil(() => complete);
+    }
+
+    Debug.Log("First player is " + mostDiceIndex);
+
+    //if (mostDiceIndex != 0)
+    //{
+    //  for (int i = mostDiceIndex; i > 0; i--)
+    //  {
+    //    PlayerController temp = playerCtrls[i - 1];
+    //    playerCtrls[i - 1] = playerCtrls[i];
+    //    playerCtrls[i] = temp;
+    //  }
+
+    //  for (int i = mostDiceIndex + 1; i < playerCtrls.Length; i++)
+    //  {
+    //    PlayerController temp = playerCtrls[i - 1];
+    //    playerCtrls[i - 1] = playerCtrls[i];
+    //    playerCtrls[i] = temp;
+
+    //    int x = i - 1;
+    //    if (x > 1)
+    //    {
+    //      temp = playerCtrls[x - 1];
+    //      playerCtrls[x - 1] = playerCtrls[x];
+    //      playerCtrls[x] = temp;
+    //      //x--;
+    //    }
+    //  }
+    //}
+  }
 
   private IEnumerator Start()
   {
+    //Set player health
+
+    yield return new WaitForSeconds(1f);
+
+    StartCoroutine(SetFirstPlayer());
+
     playerCtrls[0].Setup(0);
     playerCtrls[1].Setup(5);
 
@@ -34,28 +106,28 @@ public class Monopoly : MonoBehaviour
         diceResult--;
       });
 
-      yield return new WaitUntil(() => moveNextComplete == true);
+      yield return new WaitUntil(() => moveNextComplete);
 
       moveNextComplete = false;
     }
 
-    //=======================================================================
+    ////=======================================================================
 
-    playerTurn = 1;
-    diceResult = 16;
+    //playerTurn = 1;
+    //diceResult = 16;
 
-    while (diceResult > 0)
-    {
-      MoveNextSlot(() =>
-      {
-        moveNextComplete = true;
-        diceResult--;
-      });
+    //while (diceResult > 0)
+    //{
+    //  MoveNextSlot(() =>
+    //  {
+    //    moveNextComplete = true;
+    //    diceResult--;
+    //  });
 
-      yield return new WaitUntil(() => moveNextComplete == true);
+    //  yield return new WaitUntil(() => moveNextComplete);
 
-      moveNextComplete = false;
-    }
+    //  moveNextComplete = false;
+    //}
   }
 
   private void MoveNextSlot(Action onComplete = null)

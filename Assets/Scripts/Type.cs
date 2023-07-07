@@ -16,3 +16,8 @@ public enum SlotType
   Four,
   Center
 }
+
+public enum CenterAreaPage
+{
+  Dice
+}

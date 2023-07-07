@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BoardSlot : MonoBehaviour
 {
@@ -12,11 +13,16 @@ public class BoardSlot : MonoBehaviour
   [SerializeField]
   private Transform[] slots = default;
 
+  [SerializeField]
+  private Image[] upgradeSlots = default;
+
   [SerializeField]  //temporary
   private int ownedCenterSlotIndex = -1;                         //Player's index owned center slot
 
   [SerializeField]  //temporary
   private int[] ownedSlotIndex = new int[] { -1, -1, -1, -1 };   //Player's index owned these slot
+
+  private int upgradeCount = 0;
 
   public void MoveToSlot(int playerIndex, Action<Vector2> onMove, Action<int> onSwapInSlot = null)
   {
