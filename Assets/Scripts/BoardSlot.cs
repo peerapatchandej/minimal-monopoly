@@ -1,58 +1,79 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BoardSlot : MonoBehaviour
 {
-  public struct SlotData
-  {
-    public Vector2 Position;
-    public SlotType SlotType;
-  }
-
-  public enum SlotType
-  {
-    One = 0,
-    Two,
-    Three,
-    Four,
-    Center
-  }
-
   [SerializeField]
   private Transform centerSlot = default;
 
   [SerializeField]
   private Transform[] slots = default;
 
-  private bool ownedCenterSlot = false;
-  private bool[] ownedSlot = new bool[] { false, false, false, false };
+  [SerializeField]  //temporary
+  private int ownedCenterSlotIndex = -1;                         //Player's index owned center slot
 
-  public SlotData GetSlotData()
+  [SerializeField]  //temporary
+  private int[] ownedSlotIndex = new int[] { -1, -1, -1, -1 };   //Player's index owned these slot
+
+  public void MoveToSlot(int playerIndex, Action<Vector2> onMove, Action<int> onSwapInSlot = null)
   {
-    if (!ownedCenterSlot && !ownedSlot[0])
+    if (ownedCenterSlotIndex == -1)
     {
-      //ownedCenterSlot = true;
-      return new SlotData { Position = centerSlot.position, SlotType = SlotType.Center };
+      bool isEmpty = true;
+
+      for (int i = 0; i < ownedSlotIndex.Length; i++)
+      {
+        if (ownedSlotIndex[i] != -1) isEmpty = false;
+      }
+
+      if (isEmpty)
+      {
+        SetOwnedSlot(SlotType.Center, playerIndex);
+        onMove?.Invoke(centerSlot.position);
+      }
+      else
+      {
+        MoveToInnerSlot(playerIndex, onMove);
+      }
     }
     else
     {
-      for (int i = 0; i < ownedSlot.Length; i++)
-      {
-        if (!ownedSlot[i])
-        {
-          //ownedSlot[i] = true;
-          return new SlotData { Position = slots[i].position, SlotType = (SlotType)i };
-        }
-      }
+      onSwapInSlot?.Invoke(ownedCenterSlotIndex);
     }
-
-    return default;
   }
 
-  public void SetOwnedSlot(int type, bool value)
+  public void MoveToInnerSlot(int playerIndex, Action<Vector2> onMove)
   {
-    if ((SlotType)type == SlotType.Center) ownedCenterSlot = value;
-    else ownedSlot[type] = value;
+    for (int i = 0; i < ownedSlotIndex.Length; i++)
+    {
+      if (ownedSlotIndex[i] == -1)
+      {
+        SetOwnedSlot((SlotType)i, playerIndex);
+        onMove?.Invoke(slots[i].position);
+        break;
+      }
+    }
+  }
+
+  public void SetOwnedSlot(SlotType type, int playerIndex)
+  {
+    if (type == SlotType.Center) ownedCenterSlotIndex = playerIndex;
+    else ownedSlotIndex[(int)type] = playerIndex;
+  }
+
+  public void ClearOwnedSlot(int playerIndex)
+  {
+    if (ownedCenterSlotIndex == playerIndex)
+    {
+      ownedCenterSlotIndex = -1;
+    }
+    else
+    {
+      int foundIndex = ownedSlotIndex.ToList().FindIndex(slot => slot == playerIndex);
+      if (foundIndex != -1) ownedSlotIndex[foundIndex] = -1;
+    }
   }
 }

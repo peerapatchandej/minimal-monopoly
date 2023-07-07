@@ -7,11 +7,12 @@ using System;
 public class Monopoly : MonoBehaviour
 {
   [SerializeField]
-  private PlayerController[] playerCtrls = default; //prototype ของจริงจะเป็น array
+  private PlayerController[] playerCtrls = default; //prototype ของจริงจะเป็น array จัดเรียง index ตามลำดับผู้เล่น
 
   [SerializeField]
   private BoardController boardCtrl = default;
 
+  private int playerTurn;
   private int diceResult;
   private bool moveNextComplete = false;
 
@@ -22,15 +23,12 @@ public class Monopoly : MonoBehaviour
 
     yield return new WaitForSeconds(1f);
 
+    playerTurn = 0;
     diceResult = 1;
 
-    //Clear old owned slot
-    BoardSlot boardSlot = boardCtrl.GetBoardSlot(playerCtrls[0].originIndex);
-    boardSlot.SetOwnedSlot(playerCtrls[0].ownedSlot, false);
-
-    while (diceResult > 0)
+    while (diceResult > playerTurn)
     {
-      MoveNextSlot(playerCtrls[0], () =>
+      MoveNextSlot(() =>
       {
         moveNextComplete = true;
         diceResult--;
@@ -43,15 +41,12 @@ public class Monopoly : MonoBehaviour
 
     //=======================================================================
 
+    playerTurn = 1;
     diceResult = 16;
-
-    //Clear old owned slot
-    boardSlot = boardCtrl.GetBoardSlot(playerCtrls[1].originIndex);
-    boardSlot.SetOwnedSlot(playerCtrls[1].ownedSlot, false);
 
     while (diceResult > 0)
     {
-      MoveNextSlot(playerCtrls[1], () =>
+      MoveNextSlot(() =>
       {
         moveNextComplete = true;
         diceResult--;
@@ -63,40 +58,54 @@ public class Monopoly : MonoBehaviour
     }
   }
 
-  private void MoveNextSlot(PlayerController playerCtrl, Action onComplete = null)
+  private void MoveNextSlot(Action onComplete = null)
   {
-    //ก่อนทีจะ move ต้องเช็ค player ในช่องก่อนหน้าก่อนว่ามีมั้ย ถ้ามีก็ให้ player ในช่องนั้น swap in slot
+    //Clear old owned slot
+    int previousIndex = playerCtrls[playerTurn].currentIndex - 1;
 
-    int nextIndex = playerCtrl.currentIndex + 1;
+    BoardSlot boardSlot = boardCtrl.GetBoardSlot(previousIndex >= 0 ? previousIndex : 0);
+    boardSlot.ClearOwnedSlot(playerTurn);
 
+    int nextIndex = playerCtrls[playerTurn].currentIndex + 1;
+
+    //ถ้าเดินจนวนสนามแล้วจะรีเซ็ต index
     if (nextIndex >= boardCtrl.GetBoardSlotCount())
     {
       nextIndex = 0;
     }
 
-    BoardSlot boardSlot = boardCtrl.GetBoardSlot(nextIndex);
-    BoardSlot.SlotData slotData = boardSlot.GetSlotData();
-    playerCtrl.Move(nextIndex, slotData.Position, () =>
+    //ก่อนทีจะ move ต้องเช็ค player ในช่องก่อนหน้าก่อนว่ามีมั้ย ถ้ามีก็ให้ player ในช่องนั้น swap in slot
+    boardSlot = boardCtrl.GetBoardSlot(nextIndex);
+    boardSlot.MoveToSlot(playerTurn, (position) =>
     {
-      onComplete?.Invoke();
-      if (diceResult == 0)
+      playerCtrls[playerTurn].Move(nextIndex, position, () =>
       {
-        playerCtrl.originIndex = playerCtrl.currentIndex;
-        playerCtrl.ownedSlot = (int)slotData.SlotType;
-
-        BoardSlot boardSlot = boardCtrl.GetBoardSlot(playerCtrl.originIndex);
-        boardSlot.SetOwnedSlot(playerCtrl.ownedSlot, true);
-
-        Debug.Log($"originIndex : {playerCtrl.originIndex}");
-        Debug.Log($"ownedSlot : {playerCtrl.ownedSlot}");
-      }
+        onComplete?.Invoke();
+        if (diceResult == 0)
+        {
+          Debug.Log($"currentIndex : {playerCtrls[playerTurn].currentIndex}");
+        }
+      });
+    }, (otherPlayer) =>
+    {
+      Debug.Log("otherPlayer " + otherPlayer);
+      MoveSwapInSlot(otherPlayer, () =>
+      {
+        MoveNextSlot(onComplete);
+      });
     });
   }
 
-  private void MoveSwapInSlot(PlayerController playerCtrl, Action onComplete = null)
+  private void MoveSwapInSlot(int index, Action onComplete = null)
   {
-    BoardSlot boardSlot = boardCtrl.GetBoardSlot(playerCtrl.currentIndex);
-    BoardSlot.SlotData slotData = boardSlot.GetSlotData();
-    playerCtrl.Move(playerCtrl.currentIndex, slotData.Position, onComplete);
+    BoardSlot boardSlot = boardCtrl.GetBoardSlot(playerCtrls[index].currentIndex);
+    boardSlot.MoveToInnerSlot(index, (position) =>
+    {
+      boardSlot.ClearOwnedSlot(index);
+      playerCtrls[index].Move(playerCtrls[index].currentIndex, position, () =>
+      {
+        onComplete?.Invoke();
+      });
+    });
   }
 }
