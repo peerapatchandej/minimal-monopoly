@@ -240,6 +240,12 @@ MonoBehaviour:
   - {fileID: 2692216029945121036}
   - {fileID: 2305921885453618401}
   - {fileID: 7825625641016011249}
+  upgradeSlots:
+  - {fileID: 3246733815011641375}
+  - {fileID: 7907704544194005112}
+  - {fileID: 1675126868500814291}
+  ownedCenterSlotIndex: -1
+  ownedSlotIndex: ffffffffffffffffffffffffffffffff
 --- !u!1 &7044545477675274048
 GameObject:
   m_ObjectHideFlags: 0

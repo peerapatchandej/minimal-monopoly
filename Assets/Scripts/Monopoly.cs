@@ -90,15 +90,45 @@ public class Monopoly : MonoBehaviour
 
     StartCoroutine(SetFirstPlayer());
 
-    playerCtrls[0].Setup(0);
-    playerCtrls[1].Setup(5);
+    playerCtrls[0].Setup(Const.RED_PLAYER_INDEX);
+    playerCtrls[1].Setup(Const.BLUE_PLAYER_INDEX);
 
     yield return new WaitForSeconds(1f);
 
     playerTurn = 0;
     diceResult = 1;
 
-    while (diceResult > playerTurn)
+    while (diceResult > 0)
+    {
+      MoveNextSlot(() =>
+      {
+        moveNextComplete = true;
+        diceResult--;
+      });
+
+      yield return new WaitUntil(() => moveNextComplete);
+
+      moveNextComplete = false;
+    }
+
+    diceResult = 20;
+
+    while (diceResult > 0)
+    {
+      MoveNextSlot(() =>
+      {
+        moveNextComplete = true;
+        diceResult--;
+      });
+
+      yield return new WaitUntil(() => moveNextComplete);
+
+      moveNextComplete = false;
+    }
+
+    diceResult = 20;
+
+    while (diceResult > 0)
     {
       MoveNextSlot(() =>
       {
@@ -134,8 +164,7 @@ public class Monopoly : MonoBehaviour
   {
     //Clear old owned slot
     int previousIndex = playerCtrls[playerTurn].currentIndex - 1;
-
-    BoardSlot boardSlot = boardCtrl.GetBoardSlot(previousIndex >= 0 ? previousIndex : 0);
+    BoardSlot boardSlot = boardCtrl.GetBoardSlot(previousIndex >= 0 ? previousIndex : boardCtrl.GetBoardSlotCount() - 1);
     boardSlot.ClearOwnedSlot(playerTurn);
 
     int nextIndex = playerCtrls[playerTurn].currentIndex + 1;
@@ -155,7 +184,26 @@ public class Monopoly : MonoBehaviour
         onComplete?.Invoke();
         if (diceResult == 0)
         {
-          Debug.Log($"currentIndex : {playerCtrls[playerTurn].currentIndex}");
+          //Debug.Log($"currentIndex : {playerCtrls[playerTurn].currentIndex}");
+
+          //Action upgrade
+          if (!boardSlot.SlotHasUpgrade())
+          {
+            boardSlot.UpgradeSlot(playerTurn);
+          }
+          else
+          {
+            if (boardSlot.CheckOwner(playerTurn))
+            {
+              boardSlot.UpgradeSlot(playerTurn);
+            }
+            else
+            {
+              Debug.Log("Take Damage");
+              boardSlot.ResetUpgradeSlot();
+              //TakeDamage
+            }
+          }
         }
       });
     }, (otherPlayer) =>

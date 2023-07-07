@@ -22,6 +22,7 @@ public class BoardSlot : MonoBehaviour
   [SerializeField]  //temporary
   private int[] ownedSlotIndex = new int[] { -1, -1, -1, -1 };   //Player's index owned these slot
 
+  private int playerUpgrade = -1; //Player's index
   private int upgradeCount = 0;
 
   public void MoveToSlot(int playerIndex, Action<Vector2> onMove, Action<int> onSwapInSlot = null)
@@ -64,12 +65,6 @@ public class BoardSlot : MonoBehaviour
     }
   }
 
-  public void SetOwnedSlot(SlotType type, int playerIndex)
-  {
-    if (type == SlotType.Center) ownedCenterSlotIndex = playerIndex;
-    else ownedSlotIndex[(int)type] = playerIndex;
-  }
-
   public void ClearOwnedSlot(int playerIndex)
   {
     if (ownedCenterSlotIndex == playerIndex)
@@ -81,5 +76,53 @@ public class BoardSlot : MonoBehaviour
       int foundIndex = ownedSlotIndex.ToList().FindIndex(slot => slot == playerIndex);
       if (foundIndex != -1) ownedSlotIndex[foundIndex] = -1;
     }
+  }
+
+  public void UpgradeSlot(int playerIndex)
+  {
+    if (upgradeCount >= upgradeSlots.Length)
+    {
+      Debug.Log($"Player {playerIndex} exceed limit upgrade");
+      return;
+    }
+
+    playerUpgrade = playerIndex;
+    Color color = default;
+
+    if (playerUpgrade == 0) color = Const.RED_COLOR;
+    else if (playerUpgrade == 1) color = Const.BLUE_COLOR;
+    else if (playerUpgrade == 2) color = Const.YELLOW_COLOR;
+    else if (playerUpgrade == 3) color = Const.GREEN_COLOR;
+
+    upgradeSlots[upgradeCount].color = color;
+    upgradeCount++;
+  }
+
+  //for check take damage and owner
+  public bool SlotHasUpgrade()
+  {
+    return playerUpgrade != -1;
+  }
+
+  public bool CheckOwner(int playerIndex)
+  {
+    return playerUpgrade == playerIndex;
+  }
+
+  public void ResetUpgradeSlot()
+  {
+    playerUpgrade = -1;
+    upgradeCount = 0;
+
+    foreach (var slot in upgradeSlots)
+    {
+      slot.color = Color.white;
+    }
+  }
+
+  private void SetOwnedSlot(SlotType type, int playerIndex)
+  {
+    if (type == SlotType.Center) ownedCenterSlotIndex = playerIndex;
+    else ownedSlotIndex[(int)type] = playerIndex;
   }
 }
