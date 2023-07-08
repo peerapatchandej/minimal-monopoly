@@ -6,7 +6,7 @@ using System;
 
 public class PlayerController : MonoBehaviour
 {
-  [SerializeField]
+  [SerializeField]  //temporary
   public int currentIndex;
 
   [SerializeField]
@@ -14,9 +14,10 @@ public class PlayerController : MonoBehaviour
 
   private float moveSpeed = 0.5f;
 
-  public void Setup(int health = 0)
+  public void Setup(int health, int index)
   {
-    if (health != 0) this.health = health;
+    this.health = health;
+    SetIndex(index);
   }
 
   public void Move(int index, Vector2 des, Action onComplete = null)

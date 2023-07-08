@@ -134,7 +134,7 @@ public class BoardSlot : MonoBehaviour
     }
   }
 
-  private void SetOwnedSlot(SlotType type, int playerIndex)
+  public void SetOwnedSlot(SlotType type, int playerIndex)
   {
     if (type == SlotType.Center) ownedCenterSlotIndex = playerIndex;
     else ownedSlotIndex[(int)type] = playerIndex;

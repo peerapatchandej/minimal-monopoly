@@ -36,8 +36,12 @@ public class Monopoly : MonoBehaviour
   private static State state;
   private static Action onSceneLoaded = null;
 
-  private int playerTurn = -1;
+  private int currentTurn = 0;
+  private int playerTurnIndex = -1;
   private int diceResult = 0;
+
+  private bool initPlayer = false;
+  private bool rollComplete = false;
   private bool moveNextComplete = false;
 
   public static void LoadScene(State state)
@@ -75,7 +79,31 @@ public class Monopoly : MonoBehaviour
 
     StartCoroutine(SetupPlayer());
 
-    yield return new WaitForSeconds(1f);
+    yield return new WaitUntil(() => initPlayer);
+
+    rollComplete = false;
+    boardCtrl.SetBorderColor(state.PlayerSlotIndexes[playerTurnIndex]);
+
+    RollDice((result) =>
+    {
+      diceResult = result;
+      rollComplete = true;
+    });
+
+    yield return new WaitUntil(() => rollComplete);
+
+    while (diceResult > 0)
+    {
+      MoveNextSlot(() =>
+      {
+        moveNextComplete = true;
+        diceResult--;
+      });
+
+      yield return new WaitUntil(() => moveNextComplete);
+
+      moveNextComplete = false;
+    }
 
     //playerCtrls[0].Setup(Const.RED_PLAYER_INDEX);
     //playerCtrls[1].Setup(Const.BLUE_PLAYER_INDEX);
@@ -175,7 +203,7 @@ public class Monopoly : MonoBehaviour
         if (diceResult < result)
         {
           diceResult = result;
-          playerTurn = rollCount;
+          playerTurnIndex = rollCount;
         }
 
         rollCount++;
@@ -186,18 +214,19 @@ public class Monopoly : MonoBehaviour
       yield return new WaitForSeconds(1f);
     }
 
-    Debug.Log("First player is " + playerTurn);
+    Debug.Log("First player is " + playerTurnIndex);
 
     //========================================================
 
     int sortCount = 0;
-    int i = playerTurn;
+    int i = playerTurnIndex;
 
     while (sortCount < state.PlayerSlotIndexes.Count)
     {
       if (i < state.PlayerSlotIndexes.Count)
       {
         playerCtrls.Add(playerCtrlsTemp[i]);
+        boardCtrl.GetBoardSlot(playerCtrls[playerCtrls.Count - 1].currentIndex).SetOwnedSlot(SlotType.Center, playerCtrls.Count - 1);
         i++;
         sortCount++;
       }
@@ -208,6 +237,7 @@ public class Monopoly : MonoBehaviour
     }
 
     playerCtrlsTemp.Clear();
+    initPlayer = true;
   }
 
   private void RollDice(Action<int> callback)
@@ -218,11 +248,11 @@ public class Monopoly : MonoBehaviour
   private void MoveNextSlot(Action onComplete = null)
   {
     //Clear old owned slot
-    int previousIndex = playerCtrls[playerTurn].currentIndex - 1;
+    int previousIndex = playerCtrls[currentTurn].currentIndex - 1;
     BoardSlot boardSlot = boardCtrl.GetBoardSlot(previousIndex >= 0 ? previousIndex : boardCtrl.GetBoardSlotCount() - 1);
-    boardSlot.ClearOwnedSlot(playerTurn);
+    boardSlot.ClearOwnedSlot(currentTurn);
 
-    int nextIndex = playerCtrls[playerTurn].currentIndex + 1;
+    int nextIndex = playerCtrls[currentTurn].currentIndex + 1;
 
     //ถ้าเดินจนวนสนามแล้วจะรีเซ็ต index
     if (nextIndex >= boardCtrl.GetBoardSlotCount())
@@ -232,9 +262,9 @@ public class Monopoly : MonoBehaviour
 
     //ก่อนทีจะ move ต้องเช็ค player ในช่องก่อนหน้าก่อนว่ามีมั้ย ถ้ามีก็ให้ player ในช่องนั้น swap in slot
     boardSlot = boardCtrl.GetBoardSlot(nextIndex);
-    boardSlot.MoveToSlot(playerTurn, (position) =>
+    boardSlot.MoveToSlot(currentTurn, (position) =>
     {
-      playerCtrls[playerTurn].Move(nextIndex, position, () =>
+      playerCtrls[currentTurn].Move(nextIndex, position, () =>
       {
         onComplete?.Invoke();
         if (diceResult == 0)
@@ -247,13 +277,13 @@ public class Monopoly : MonoBehaviour
 
           if (!boardSlot.SlotHasUpgrade())
           {
-            boardSlot.UpgradeSlot(playerTurn);
+            boardSlot.UpgradeSlot(currentTurn);
           }
           else
           {
-            if (boardSlot.CheckOwner(playerTurn))
+            if (boardSlot.CheckOwner(currentTurn))
             {
-              boardSlot.UpgradeSlot(playerTurn);
+              boardSlot.UpgradeSlot(currentTurn);
             }
             else
             {
