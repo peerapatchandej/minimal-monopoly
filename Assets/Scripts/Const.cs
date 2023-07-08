@@ -15,5 +15,6 @@ public class Const
   public static readonly Color YELLOW_COLOR = new Color(1, 0.9576147f, 0.5882353f, 1);
   public static readonly Color GREEN_COLOR = new Color(0.8242681f, 1, 0.5330188f, 1);
 
+  public static readonly int MIN_PLAYER = 2;
   public static readonly int DEFAULT_HEALTH = 9;
 }

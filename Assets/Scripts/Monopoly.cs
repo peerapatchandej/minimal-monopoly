@@ -13,6 +13,11 @@ public class Monopoly : MonoBehaviour
   public struct State
   {
     public List<int> PlayerSlotIndexes;
+    public int PlayerHealth;
+    public int MaxEdge;
+    public int MaxUpgradeSlot;
+    public int DiceType;
+    public int MaxDice;
   }
 
   [SerializeField]

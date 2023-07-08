@@ -10,33 +10,63 @@ public class UICreateRoom : MonoBehaviour
   private UIPlayerSlot[] playerSlots = default;
 
   [SerializeField]
+  private SettingMenu edgeSetting = default;
+
+  [SerializeField]
+  private SettingMenu upgradeSlotSetting = default;
+
+  [SerializeField]
+  private SettingMenu healthSetting = default;
+
+  [SerializeField]
+  private DiceTypeSetting diceTypeSetting = default;
+
+  [SerializeField]
+  private SettingMenu diceSetting = default;
+
+  [SerializeField]
   private Button startGame = default;
 
   [SerializeField]
   private Button back = default;
 
   private List<int> playerSlotIndexes = new List<int>();
+  private int playerCount = 0;
 
-  public void Setup(Action OnCreateMainMenu, Action<List<int>> onLoadGameScene)
+  public void Setup(Action OnCreateMainMenu, Action<Monopoly.State> onLoadGameScene)
   {
     foreach (var slot in playerSlots)
     {
       slot.Setup((index) =>
       {
+        playerCount++;
+        UpdateStartButton();
         playerSlotIndexes.Add(index);
       }, (index) =>
       {
-        
+        playerCount++;
+        UpdateStartButton();
       }, (index) =>
       {
+        playerCount--;
+        UpdateStartButton();
         playerSlotIndexes.Remove(index);
       });
     }
 
+    startGame.interactable = false;
     startGame.onClick.AddListener(() =>
     {
       playerSlotIndexes.Sort();
-      onLoadGameScene?.Invoke(playerSlotIndexes);
+      onLoadGameScene?.Invoke(new Monopoly.State
+      {
+        PlayerSlotIndexes = playerSlotIndexes,
+        PlayerHealth = healthSetting.GetValue(),
+        MaxEdge = edgeSetting.GetValue(),
+        MaxUpgradeSlot = upgradeSlotSetting.GetValue(),
+        DiceType = diceTypeSetting.GetValue(),
+        MaxDice = diceSetting.GetValue()
+      });
     });
 
     back.onClick.AddListener(() =>
@@ -45,5 +75,10 @@ public class UICreateRoom : MonoBehaviour
       back.interactable = false;
       Destroy(gameObject);
     });
+  }
+
+  private void UpdateStartButton()
+  {
+    startGame.interactable = playerCount >= Const.MIN_PLAYER;
   }
 }

@@ -12,7 +12,7 @@ public class UIMainMenu : MonoBehaviour
   [SerializeField]
   private Button quitGame = default;
 
-  public void Setup(ResourceLoader resourceLoader, Action onCreateMainMenu, Action<List<int>> onLoadGameScene)
+  public void Setup(ResourceLoader resourceLoader, Action onCreateMainMenu, Action<Monopoly.State> onLoadGameScene)
   {
     if (createRoom)
     {

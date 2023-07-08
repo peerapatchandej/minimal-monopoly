@@ -18,12 +18,9 @@ public class SceneMainMenu : MonoBehaviour
       UIMainMenu mainMenu = obj.GetComponent<UIMainMenu>();
       if (mainMenu)
       {
-        mainMenu.Setup(resourceLoader, CreateMainMenu, (players) =>
+        mainMenu.Setup(resourceLoader, CreateMainMenu, (state) =>
         {
-          Monopoly.LoadScene(new Monopoly.State
-          {
-            PlayerSlotIndexes = players
-          });
+          Monopoly.LoadScene(state);
         });
       }
     });
