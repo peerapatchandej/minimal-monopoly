@@ -54,6 +54,7 @@ public class BoardController : MonoBehaviour
   [SerializeField]
   private GameObject[] pawns = default;
 
+  [SerializeField]
   private List<BoardSlot> boardSlots = new List<BoardSlot>();
 
   public void CreateBoard(int maxEdge, int maxUpgradeSlot, List<int> playerSlotIndexes)
@@ -67,15 +68,24 @@ public class BoardController : MonoBehaviour
     float defaultBoardHeight = (edgeRect.rect.height * Const.DEFAULT_EDGE) + (verticalLayout.spacing * (Const.DEFAULT_EDGE - 1)) + (pawnRect.rect.height * 2) + (boardVerticalLayout.spacing * 2);
 
     GameObject redCornerObj = Instantiate(redCorner, topParent);
+    boardSlots.Add(redCornerObj.GetComponent<BoardSlot>());
+
     CreateEdge(topEdge, topParent, maxEdge, maxUpgradeSlot);
+
     GameObject blueCornerObj = Instantiate(blueCorner, topParent);
+    boardSlots.Add(blueCornerObj.GetComponent<BoardSlot>());
+
+    CreateEdge(rightEdge, rightParent, maxEdge, maxUpgradeSlot);
 
     GameObject yellowCornerObj = Instantiate(yellowCorner, bottomParent);
+    boardSlots.Add(yellowCornerObj.GetComponent<BoardSlot>());
+
     CreateEdge(bottomEdge, bottomParent, maxEdge, maxUpgradeSlot);
+
     GameObject greenCornerObj = Instantiate(greenCorner, bottomParent);
+    boardSlots.Add(greenCornerObj.GetComponent<BoardSlot>());
 
     CreateEdge(leftEdge, leftParent, maxEdge, maxUpgradeSlot);
-    CreateEdge(rightEdge, rightParent, maxEdge, maxUpgradeSlot);
 
     if (maxEdge != Const.DEFAULT_EDGE)
     {
@@ -126,6 +136,8 @@ public class BoardController : MonoBehaviour
       {
         slot.SetupUpdateSlot(maxUpgradeSlot);
       }
+
+      boardSlots.Add(slot);
     }
   }
 
