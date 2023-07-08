@@ -28,9 +28,6 @@ public class Monopoly : MonoBehaviour
   private CenterArea centerArea = default;
 
   [SerializeField]
-  private GameObject[] pawnObjects = default;
-
-  [SerializeField]
   private Transform pawnParent = default;
 
   [SerializeField]
@@ -73,13 +70,11 @@ public class Monopoly : MonoBehaviour
 
   private IEnumerator Start()
   {
-    RollDice((result) =>
-    {
-      Debug.Log("Dice result : " + result);
-    });
-    //StartCoroutine(SetupPlayer());
+    //Play Start Match Animation
 
     yield return new WaitForSeconds(1f);
+
+    StartCoroutine(SetupPlayer());
 
     //playerCtrls[0].Setup(Const.RED_PLAYER_INDEX);
     //playerCtrls[1].Setup(Const.BLUE_PLAYER_INDEX);
@@ -155,10 +150,9 @@ public class Monopoly : MonoBehaviour
   {
     List<PlayerController> playerCtrlsTemp = new List<PlayerController>();
 
-    foreach (var obj in pawnObjects)
+    for (int x = 0; x < pawnParent.childCount; x++)
     {
-      GameObject player = Instantiate(obj, pawnParent);
-      PlayerController playerCtrl = player.GetComponent<PlayerController>();
+      PlayerController playerCtrl = pawnParent.GetChild(x).GetComponent<PlayerController>();
       playerCtrlsTemp.Add(playerCtrl);
     }
 
@@ -170,6 +164,7 @@ public class Monopoly : MonoBehaviour
     //order by red blue yellow green [Animation]
     while (rollCount < maxPlayer)
     {
+      boardCtrl.SetBorderColor(rollCount);
       complete = false;
 
       RollDice((result) =>
@@ -187,6 +182,7 @@ public class Monopoly : MonoBehaviour
       });
 
       yield return new WaitUntil(() => complete);
+      yield return new WaitForSeconds(1f);
     }
 
     Debug.Log("First player is " + playerTurn);

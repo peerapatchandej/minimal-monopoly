@@ -55,6 +55,9 @@ public class BoardController : MonoBehaviour
   private Transform diceParent = default;
 
   [SerializeField]
+  private Image borderImage = default;
+
+  [SerializeField]
   private GameObject[] pawns = default;
 
   [SerializeField]
@@ -151,6 +154,25 @@ public class BoardController : MonoBehaviour
           CreateDice(dices[4]);
           break;
       }
+    }
+  }
+
+  public void SetBorderColor(int index)
+  {
+    switch ((PlayerType)index)
+    {
+      case PlayerType.Red:
+        borderImage.color = Const.RED_COLOR;
+        break;
+      case PlayerType.Blue:
+        borderImage.color = Const.BLUE_COLOR;
+        break;
+      case PlayerType.Yellow:
+        borderImage.color = Const.YELLOW_COLOR;
+        break;
+      case PlayerType.Green:
+        borderImage.color = Const.GREEN_COLOR;
+        break;
     }
   }
 

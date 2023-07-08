@@ -19,10 +19,17 @@ public class DiceController : MonoBehaviour
   [SerializeField]
   private Button stop = default;
 
-  public int result {  get; private set; }
+  public int result { get; private set; }
+
+  private void Awake()
+  {
+    resultObj.SetActive(false);
+    stop.gameObject.SetActive(false);
+  }
 
   public void Setup(Action<int> callback)
   {
+    result = 0;
     resultObj.SetActive(false);
 
     for (int i = 0; i < dices.childCount - 2; i++)
