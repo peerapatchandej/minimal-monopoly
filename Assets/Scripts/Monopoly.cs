@@ -36,7 +36,6 @@ public class Monopoly : MonoBehaviour
   private static State state;
   private static Action onSceneLoaded = null;
 
-  private int maxPlayer = 4;
   private int playerTurn = -1;
   private int diceResult = 0;
   private bool moveNextComplete = false;
@@ -164,9 +163,9 @@ public class Monopoly : MonoBehaviour
     bool complete = false;
 
     //order by red blue yellow green [Animation]
-    while (rollCount < maxPlayer)
+    while (rollCount < state.PlayerSlotIndexes.Count)
     {
-      boardCtrl.SetBorderColor(rollCount);
+      boardCtrl.SetBorderColor(state.PlayerSlotIndexes[rollCount]);
       complete = false;
 
       RollDice((result) =>
@@ -194,9 +193,9 @@ public class Monopoly : MonoBehaviour
     int sortCount = 0;
     int i = playerTurn;
 
-    while (sortCount < maxPlayer)
+    while (sortCount < state.PlayerSlotIndexes.Count)
     {
-      if (i < maxPlayer)
+      if (i < state.PlayerSlotIndexes.Count)
       {
         playerCtrls.Add(playerCtrlsTemp[i]);
         i++;
