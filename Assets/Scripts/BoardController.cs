@@ -70,11 +70,15 @@ public class BoardController : MonoBehaviour
     CreateEdge(leftEdge, leftParent, maxEdge);
     CreateEdge(rightEdge, rightParent, maxEdge);
 
-    if (maxEdge > Const.DEFAULT_EDGE)
+    if (maxEdge != Const.DEFAULT_EDGE)
     {
       centerArea.sizeDelta = new Vector2((edgeRect.rect.width + horizontalLayout.spacing) * maxEdge - 18f, (edgeRect.rect.height + verticalLayout.spacing) * maxEdge - 18f);
-      float currentBoardHeight = (edgeRect.rect.height * maxEdge) + (verticalLayout.spacing * (maxEdge - 1)) + (pawnRect.rect.height * 2) + (boardVerticalLayout.spacing * 2);
-      board.localScale = new Vector2(defaultBoardHeight / currentBoardHeight, defaultBoardHeight / currentBoardHeight);
+
+      if (maxEdge > Const.DEFAULT_EDGE)
+      {
+        float currentBoardHeight = (edgeRect.rect.height * maxEdge) + (verticalLayout.spacing * (maxEdge - 1)) + (pawnRect.rect.height * 2) + (boardVerticalLayout.spacing * 2);
+        board.localScale = new Vector2(defaultBoardHeight / currentBoardHeight, defaultBoardHeight / currentBoardHeight);
+      }
     }
 
     LayoutRebuilder.ForceRebuildLayoutImmediate(board);
