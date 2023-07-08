@@ -8,140 +8,83 @@ using System.Linq;
 public class Monopoly : MonoBehaviour
 {
   [SerializeField]
-  private PlayerController[] playerCtrls = default; //prototype ของจริงจะเป็น array จัดเรียง index ตามลำดับผู้เล่น
-
-  [SerializeField]
   private BoardController boardCtrl = default;
 
   [SerializeField]
   private CenterArea centerArea = default;
 
+  [SerializeField]
+  private GameObject[] pawnObjects = default;
+
+  [SerializeField]
+  private Transform pawnParent = default;
+
+  [SerializeField]
+  private List<PlayerController> playerCtrls = new List<PlayerController>();
+
+  private int maxPlayer = 4;
   private int playerTurn = -1;
   private int diceResult = 0;
   private bool moveNextComplete = false;
 
-  private void RollDice(Action<int> callback)
-  {
-    if (centerArea) centerArea.EnableDicePage(callback);
-  }
-
-  private IEnumerator SetFirstPlayer()
-  {
-    int count = 0;
-    int mostDiceIndex = 0;
-    bool complete = false;
-
-    //order by red blue yellow green [Animation]
-    while (count < playerCtrls.Length)
-    {
-      complete = false;
-
-      RollDice((result) =>
-      {
-        Debug.Log("Result : " + result);
-
-        if (diceResult < result)
-        {
-          diceResult = result;
-          mostDiceIndex = count;
-        }
-
-        count++;
-        complete = true;
-      });
-
-      yield return new WaitUntil(() => complete);
-    }
-
-    Debug.Log("First player is " + mostDiceIndex);
-
-    //if (mostDiceIndex != 0)
-    //{
-    //  for (int i = mostDiceIndex; i > 0; i--)
-    //  {
-    //    PlayerController temp = playerCtrls[i - 1];
-    //    playerCtrls[i - 1] = playerCtrls[i];
-    //    playerCtrls[i] = temp;
-    //  }
-
-    //  for (int i = mostDiceIndex + 1; i < playerCtrls.Length; i++)
-    //  {
-    //    PlayerController temp = playerCtrls[i - 1];
-    //    playerCtrls[i - 1] = playerCtrls[i];
-    //    playerCtrls[i] = temp;
-
-    //    int x = i - 1;
-    //    if (x > 1)
-    //    {
-    //      temp = playerCtrls[x - 1];
-    //      playerCtrls[x - 1] = playerCtrls[x];
-    //      playerCtrls[x] = temp;
-    //      //x--;
-    //    }
-    //  }
-    //}
-  }
-
   private IEnumerator Start()
   {
-    //Set player health
+    StartCoroutine(SetupPlayer());
 
     yield return new WaitForSeconds(1f);
 
-    StartCoroutine(SetFirstPlayer());
+    //playerCtrls[0].Setup(Const.RED_PLAYER_INDEX);
+    //playerCtrls[1].Setup(Const.BLUE_PLAYER_INDEX);
 
-    playerCtrls[0].Setup(Const.RED_PLAYER_INDEX);
-    playerCtrls[1].Setup(Const.BLUE_PLAYER_INDEX);
+    //yield return new WaitForSeconds(1f);
 
-    yield return new WaitForSeconds(1f);
+    //playerTurn = 0;
+    //diceResult = 1;
 
-    playerTurn = 0;
-    diceResult = 1;
+    //while (diceResult > 0)
+    //{
+    //  MoveNextSlot(() =>
+    //  {
+    //    moveNextComplete = true;
+    //    diceResult--;
+    //  });
 
-    while (diceResult > 0)
-    {
-      MoveNextSlot(() =>
-      {
-        moveNextComplete = true;
-        diceResult--;
-      });
+    //  yield return new WaitUntil(() => moveNextComplete);
 
-      yield return new WaitUntil(() => moveNextComplete);
+    //  moveNextComplete = false;
+    //}
 
-      moveNextComplete = false;
-    }
+    //diceResult = 20;
 
-    diceResult = 20;
+    //while (diceResult > 0)
+    //{
+    //  MoveNextSlot(() =>
+    //  {
+    //    moveNextComplete = true;
+    //    diceResult--;
+    //  });
 
-    while (diceResult > 0)
-    {
-      MoveNextSlot(() =>
-      {
-        moveNextComplete = true;
-        diceResult--;
-      });
+    //  yield return new WaitUntil(() => moveNextComplete);
 
-      yield return new WaitUntil(() => moveNextComplete);
+    //  moveNextComplete = false;
+    //}
 
-      moveNextComplete = false;
-    }
+    //diceResult = 20;
 
-    diceResult = 20;
+    //while (diceResult > 0)
+    //{
+    //  MoveNextSlot(() =>
+    //  {
+    //    moveNextComplete = true;
+    //    diceResult--;
+    //  });
 
-    while (diceResult > 0)
-    {
-      MoveNextSlot(() =>
-      {
-        moveNextComplete = true;
-        diceResult--;
-      });
+    //  yield return new WaitUntil(() => moveNextComplete);
 
-      yield return new WaitUntil(() => moveNextComplete);
+    //  moveNextComplete = false;
+    //}
 
-      moveNextComplete = false;
-    }
-
-    ////=======================================================================
+    //=======================================================================
 
     //playerTurn = 1;
     //diceResult = 16;
@@ -158,6 +101,74 @@ public class Monopoly : MonoBehaviour
 
     //  moveNextComplete = false;
     //}
+  }
+
+  private IEnumerator SetupPlayer()
+  {
+    List<PlayerController> playerCtrlsTemp = new List<PlayerController>();
+
+    foreach (var obj in pawnObjects)
+    {
+      GameObject player = Instantiate(obj, pawnParent);
+      PlayerController playerCtrl = player.GetComponent<PlayerController>();
+      playerCtrlsTemp.Add(playerCtrl);
+    }
+
+    //========================================================
+
+    int rollCount = 0;
+    int mostDiceIndex = 0;
+    bool complete = false;
+
+    //order by red blue yellow green [Animation]
+    while (rollCount < maxPlayer)
+    {
+      complete = false;
+
+      RollDice((result) =>
+      {
+        Debug.Log("Dice result : " + result);
+
+        if (diceResult < result)
+        {
+          diceResult = result;
+          mostDiceIndex = rollCount;
+        }
+
+        rollCount++;
+        complete = true;
+      });
+
+      yield return new WaitUntil(() => complete);
+    }
+
+    Debug.Log("First player is " + mostDiceIndex);
+
+    //========================================================
+
+    int sortCount = 0;
+    int i = mostDiceIndex;
+
+    while (sortCount < maxPlayer)
+    {
+      if (i < maxPlayer)
+      {
+        playerCtrls.Add(playerCtrlsTemp[i]);
+        i++;
+        sortCount++;
+      }
+      else
+      {
+        i = 0;
+      }
+    }
+
+    playerCtrlsTemp.Clear();
+  }
+
+  private void RollDice(Action<int> callback)
+  {
+    if (centerArea) centerArea.EnableDicePage(callback);
   }
 
   private void MoveNextSlot(Action onComplete = null)
@@ -187,6 +198,9 @@ public class Monopoly : MonoBehaviour
           //Debug.Log($"currentIndex : {playerCtrls[playerTurn].currentIndex}");
 
           //Action upgrade
+          //check is corner then heal
+          //else select upgrade or take damage
+
           if (!boardSlot.SlotHasUpgrade())
           {
             boardSlot.UpgradeSlot(playerTurn);

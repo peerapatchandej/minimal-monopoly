@@ -8,10 +8,12 @@ public class PlayerController : MonoBehaviour
 {
   public int currentIndex { get; private set; }
 
+  private int health = Const.DEFAULT_HEALTH;
   private float moveSpeed = 0.5f;
 
-  public void Setup(int index)
+  public void Setup(int index, int health = 0)
   {
+    if (health != 0) this.health = health;
     SetIndex(index);
   }
 
