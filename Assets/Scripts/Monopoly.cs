@@ -36,6 +36,7 @@ public class Monopoly : MonoBehaviour
   private List<PlayerController> playerCtrls = new List<PlayerController>();
 
   private static State state;
+  private static Action onSceneLoaded = null;
 
   private int maxPlayer = 4;
   private int playerTurn = -1;
@@ -58,11 +59,20 @@ public class Monopoly : MonoBehaviour
   private static void OnSceneLoaded(State stateParam)
   {
     state = stateParam;
+    onSceneLoaded?.Invoke();
+  }
+
+  private void Awake()
+  {
+    onSceneLoaded = () =>
+    {
+      boardCtrl.CreateBoard(state.MaxEdge, state.MaxUpgradeSlot);
+    };
   }
 
   private IEnumerator Start()
   {
-    StartCoroutine(SetupPlayer());
+    //StartCoroutine(SetupPlayer());
 
     yield return new WaitForSeconds(1f);
 
