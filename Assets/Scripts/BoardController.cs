@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -47,9 +48,15 @@ public class BoardController : MonoBehaviour
   [SerializeField]
   private RectTransform centerArea = default;
 
+  [SerializeField]
+  private Transform pawnParent = default;
+
+  [SerializeField]
+  private GameObject[] pawns = default;
+
   private List<BoardSlot> boardSlots = new List<BoardSlot>();
 
-  public void CreateBoard(int maxEdge, int maxUpgradeSlot)
+  public void CreateBoard(int maxEdge, int maxUpgradeSlot, List<int> playerSlotIndexes)
   {
     RectTransform edgeRect = topEdge.GetComponent<RectTransform>();
     RectTransform pawnRect = redCorner.GetComponent<RectTransform>();
@@ -82,6 +89,31 @@ public class BoardController : MonoBehaviour
     }
 
     LayoutRebuilder.ForceRebuildLayoutImmediate(board);
+
+    foreach (var index in playerSlotIndexes)
+    {
+      GameObject pawn = null;
+
+      switch ((PlayerType)index)
+      {
+        case PlayerType.Red:
+          pawn = CreatePawn(pawns[index], redCornerObj.transform);
+          pawn.transform.localPosition = new Vector2(pawn.transform.localPosition.x, -pawn.transform.localPosition.x);
+          break;
+        case PlayerType.Blue:
+          pawn = CreatePawn(pawns[index], blueCornerObj.transform);
+          pawn.transform.localPosition = new Vector2(pawn.transform.localPosition.x, pawn.transform.localPosition.x);
+          break;
+        case PlayerType.Yellow:
+          pawn = CreatePawn(pawns[index], yellowCornerObj.transform);
+          pawn.transform.localPosition = new Vector2(pawn.transform.localPosition.x, -pawn.transform.localPosition.x);
+          break;
+        case PlayerType.Green:
+          pawn = CreatePawn(pawns[index], greenCornerObj.transform);
+          pawn.transform.localPosition = new Vector2(pawn.transform.localPosition.x, pawn.transform.localPosition.x);
+          break;
+      }
+    }
   }
 
   private void CreateEdge(GameObject obj, Transform parent, int maxEdge, int maxUpgradeSlot)
@@ -95,6 +127,15 @@ public class BoardController : MonoBehaviour
         slot.SetupUpdateSlot(maxUpgradeSlot);
       }
     }
+  }
+
+  private GameObject CreatePawn(GameObject obj, Transform parent)
+  {
+    GameObject pawn = Instantiate(obj, parent);
+    pawn.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+    pawn.transform.SetParent(pawnParent);
+    pawn.transform.localEulerAngles = Vector3.zero;
+    return pawn;
   }
 
   public BoardSlot GetBoardSlot(int index)

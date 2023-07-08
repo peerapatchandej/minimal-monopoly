@@ -21,3 +21,11 @@ public enum CenterAreaPage
 {
   Dice
 }
+
+public enum PlayerType
+{
+  Red,
+  Blue,
+  Yellow,
+  Green
+}

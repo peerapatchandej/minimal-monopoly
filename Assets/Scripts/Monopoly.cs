@@ -66,7 +66,7 @@ public class Monopoly : MonoBehaviour
   {
     onSceneLoaded = () =>
     {
-      boardCtrl.CreateBoard(state.MaxEdge, state.MaxUpgradeSlot);
+      boardCtrl.CreateBoard(state.MaxEdge, state.MaxUpgradeSlot, state.PlayerSlotIndexes);
     };
   }
 

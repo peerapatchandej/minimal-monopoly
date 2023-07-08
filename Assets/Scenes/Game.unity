@@ -1874,6 +1874,12 @@ MonoBehaviour:
   rightParent: {fileID: 462994948}
   board: {fileID: 1512227808}
   centerArea: {fileID: 1635101963}
+  pawnParent: {fileID: 1135219692}
+  pawns:
+  - {fileID: 8104669330673212459, guid: f1164ebf090af83449d94ac1bfd9d360, type: 3}
+  - {fileID: 3364403264045270002, guid: 406849cdb56b17f4fab28c0b76dab676, type: 3}
+  - {fileID: 7981355808770220922, guid: ca84e631ab4060c4fa3021a9765d3d53, type: 3}
+  - {fileID: 7148627123526178777, guid: debc23b65426f194bb705531844652a5, type: 3}
 --- !u!1 &1135219691
 GameObject:
   m_ObjectHideFlags: 0
