@@ -52,12 +52,18 @@ public class BoardController : MonoBehaviour
   private Transform pawnParent = default;
 
   [SerializeField]
+  private Transform diceParent = default;
+
+  [SerializeField]
   private GameObject[] pawns = default;
+
+  [SerializeField]
+  private GameObject[] dices = default;
 
   [SerializeField]
   private List<BoardSlot> boardSlots = new List<BoardSlot>();
 
-  public void CreateBoard(int maxEdge, int maxUpgradeSlot, List<int> playerSlotIndexes)
+  public void CreateBoard(int maxEdge, int maxUpgradeSlot, int diceType, int maxDice, List<int> playerSlotIndexes)
   {
     RectTransform edgeRect = topEdge.GetComponent<RectTransform>();
     RectTransform pawnRect = redCorner.GetComponent<RectTransform>();
@@ -124,6 +130,28 @@ public class BoardController : MonoBehaviour
           break;
       }
     }
+
+    for (int i = 0; i < maxDice; i++)
+    {
+      switch ((DiceType)diceType)
+      {
+        case DiceType.D4:
+          CreateDice(dices[0]);
+          break;
+        case DiceType.D6:
+          CreateDice(dices[1]);
+          break;
+        case DiceType.D8:
+          CreateDice(dices[2]);
+          break;
+        case DiceType.D10:
+          CreateDice(dices[3]);
+          break;
+        case DiceType.D12:
+          CreateDice(dices[4]);
+          break;
+      }
+    }
   }
 
   private void CreateEdge(GameObject obj, Transform parent, int maxEdge, int maxUpgradeSlot)
@@ -148,6 +176,12 @@ public class BoardController : MonoBehaviour
     pawn.transform.SetParent(pawnParent);
     pawn.transform.localEulerAngles = Vector3.zero;
     return pawn;
+  }
+
+  private void CreateDice(GameObject obj)
+  {
+    GameObject dice = Instantiate(obj, diceParent);
+    dice.transform.SetAsFirstSibling();
   }
 
   public BoardSlot GetBoardSlot(int index)

@@ -3,11 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class DiceController : MonoBehaviour
 {
   [SerializeField]
-  private Dice dice = default;
+  private Transform dices = default;
+
+  [SerializeField]
+  private GameObject resultObj = default;
+
+  [SerializeField]
+  private TextMeshProUGUI resultText = default;
 
   [SerializeField]
   private Button stop = default;
@@ -16,19 +23,29 @@ public class DiceController : MonoBehaviour
 
   public void Setup(Action<int> callback)
   {
-    if (dice)
+    resultObj.SetActive(false);
+
+    for (int i = 0; i < dices.childCount - 2; i++)
     {
+      Dice dice = dices.GetChild(i).GetComponent<Dice>();
       dice.RollDice();
     }
-    if (stop)
+
+    stop.gameObject.SetActive(true);
+    stop.onClick.RemoveAllListeners();
+    stop.onClick.AddListener(() =>
     {
-      stop.interactable = true;
-      stop.onClick.RemoveAllListeners();
-      stop.onClick.AddListener(() =>
+      for (int i = 0; i < dices.childCount - 2; i++)
       {
-        result = dice.StopRoll();
-        callback?.Invoke(result);
-      });
-    }
+        Dice dice = dices.GetChild(i).GetComponent<Dice>();
+        result += dice.StopRoll();
+      }
+
+      resultText.text = result.ToString();
+      resultObj.SetActive(true);
+      stop.gameObject.SetActive(false);
+
+      callback?.Invoke(result);
+    });
   }
 }

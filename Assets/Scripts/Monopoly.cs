@@ -7,6 +7,7 @@ using System.Linq;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using Unity.VisualScripting;
+using System.Numerics;
 
 public class Monopoly : MonoBehaviour
 {
@@ -66,12 +67,16 @@ public class Monopoly : MonoBehaviour
   {
     onSceneLoaded = () =>
     {
-      boardCtrl.CreateBoard(state.MaxEdge, state.MaxUpgradeSlot, state.PlayerSlotIndexes);
+      boardCtrl.CreateBoard(state.MaxEdge, state.MaxUpgradeSlot, state.DiceType, state.MaxDice, state.PlayerSlotIndexes);
     };
   }
 
   private IEnumerator Start()
   {
+    RollDice((result) =>
+    {
+      Debug.Log("Dice result : " + result);
+    });
     //StartCoroutine(SetupPlayer());
 
     yield return new WaitForSeconds(1f);
