@@ -15,13 +15,13 @@ public class GameController : MonoBehaviour
 
   private void Start()
   {
-    resourceLoader.LoadAndCreateUI("MainMenu", (obj) =>
-    {
-      UIMainMenu mainMenu = obj.GetComponent<UIMainMenu>();
-      if (mainMenu)
-      {
-        mainMenu.Setup(resourceLoader);
-      }
-    });
+    //resourceLoader.LoadAndCreateUI("MainMenu", (obj) =>
+    //{
+    //  UIMainMenu mainMenu = obj.GetComponent<UIMainMenu>();
+    //  if (mainMenu)
+    //  {
+    //    mainMenu.Setup(resourceLoader);
+    //  }
+    //});
   }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +12,7 @@ public class UIMainMenu : MonoBehaviour
   [SerializeField]
   private Button quitGame = default;
 
-  public void Setup(ResourceLoader resourceLoader)
+  public void Setup(ResourceLoader resourceLoader, Action onCreateMainMenu, Action<List<int>> onLoadGameScene)
   {
     if (createRoom)
     {
@@ -19,9 +20,14 @@ public class UIMainMenu : MonoBehaviour
       {
         resourceLoader.LoadAndCreateUI("CreateRoom", (obj) =>
         {
-
+          UICreateRoom createRoom = obj.GetComponent<UICreateRoom>();
+          if (createRoom)
+          {
+            createRoom.Setup(onCreateMainMenu, onLoadGameScene);
+          }
         });
         createRoom.interactable = false;
+        Destroy(gameObject);
       });
     }
     if (quitGame)

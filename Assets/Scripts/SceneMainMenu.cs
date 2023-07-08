@@ -4,13 +4,25 @@ using UnityEngine;
 
 public class SceneMainMenu : MonoBehaviour
 {
-  public struct Param
+  private ResourceLoader resourceLoader = new ResourceLoader();
+
+  private void Awake()
   {
-    public ResourceLoader ResourceLoader;
+    CreateMainMenu();
   }
 
-  public static void LoadScene(Param param)
+  private void CreateMainMenu()
   {
-    //resourceLoader = param.ResourceLoader;
+    resourceLoader.LoadAndCreateUI("MainMenu", (obj) =>
+    {
+      UIMainMenu mainMenu = obj.GetComponent<UIMainMenu>();
+      if (mainMenu)
+      {
+        mainMenu.Setup(resourceLoader, CreateMainMenu, (players) =>
+        {
+
+        });
+      }
+    });
   }
 }

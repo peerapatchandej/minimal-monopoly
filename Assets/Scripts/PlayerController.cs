@@ -6,15 +6,15 @@ using System;
 
 public class PlayerController : MonoBehaviour
 {
-  public int currentIndex { get; private set; }
+  [SerializeField]
+  public int currentIndex;
 
   private int health = Const.DEFAULT_HEALTH;
   private float moveSpeed = 0.5f;
 
-  public void Setup(int index, int health = 0)
+  public void Setup(int health = 0)
   {
     if (health != 0) this.health = health;
-    SetIndex(index);
   }
 
   public void Move(int index, Vector2 des, Action onComplete = null)

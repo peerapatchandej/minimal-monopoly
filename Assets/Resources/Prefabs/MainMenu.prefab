@@ -597,7 +597,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -632,8 +632,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bd14325cf9f0ae4884ea7395120cbf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  createRoom: {fileID: 0}
-  quitGame: {fileID: 0}
+  createRoom: {fileID: 872907828469679992}
+  quitGame: {fileID: 4450577846825958180}
 --- !u!1 &9215609174035157861
 GameObject:
   m_ObjectHideFlags: 0

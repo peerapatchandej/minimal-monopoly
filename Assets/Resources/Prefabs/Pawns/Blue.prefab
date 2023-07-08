@@ -10,7 +10,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3214704548652560455, guid: 98a431af6e628e34d865808be85fd52d, type: 3}
       propertyPath: m_Name
-      value: Blue Variant
+      value: Blue
+      objectReference: {fileID: 0}
+    - target: {fileID: 6419264410489319027, guid: 98a431af6e628e34d865808be85fd52d, type: 3}
+      propertyPath: currentIndex
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6845968486729022047, guid: 98a431af6e628e34d865808be85fd52d, type: 3}
       propertyPath: m_Pivot.x
