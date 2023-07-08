@@ -60,15 +60,15 @@ public class BoardController : MonoBehaviour
     float defaultBoardHeight = (edgeRect.rect.height * Const.DEFAULT_EDGE) + (verticalLayout.spacing * (Const.DEFAULT_EDGE - 1)) + (pawnRect.rect.height * 2) + (boardVerticalLayout.spacing * 2);
 
     GameObject redCornerObj = Instantiate(redCorner, topParent);
-    CreateEdge(topEdge, topParent, maxEdge);
+    CreateEdge(topEdge, topParent, maxEdge, maxUpgradeSlot);
     GameObject blueCornerObj = Instantiate(blueCorner, topParent);
 
     GameObject yellowCornerObj = Instantiate(yellowCorner, bottomParent);
-    CreateEdge(bottomEdge, bottomParent, maxEdge);
+    CreateEdge(bottomEdge, bottomParent, maxEdge, maxUpgradeSlot);
     GameObject greenCornerObj = Instantiate(greenCorner, bottomParent);
 
-    CreateEdge(leftEdge, leftParent, maxEdge);
-    CreateEdge(rightEdge, rightParent, maxEdge);
+    CreateEdge(leftEdge, leftParent, maxEdge, maxUpgradeSlot);
+    CreateEdge(rightEdge, rightParent, maxEdge, maxUpgradeSlot);
 
     if (maxEdge != Const.DEFAULT_EDGE)
     {
@@ -84,11 +84,16 @@ public class BoardController : MonoBehaviour
     LayoutRebuilder.ForceRebuildLayoutImmediate(board);
   }
 
-  private void CreateEdge(GameObject obj, Transform parent, int maxEdge)
+  private void CreateEdge(GameObject obj, Transform parent, int maxEdge, int maxUpgradeSlot)
   {
     for (int i = 0; i < maxEdge; i++)
     {
       GameObject edge = Instantiate(obj, parent);
+      BoardSlot slot = edge.GetComponent<BoardSlot>();
+      if (slot)
+      {
+        slot.SetupUpdateSlot(maxUpgradeSlot);
+      }
     }
   }
 

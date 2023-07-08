@@ -14,7 +14,10 @@ public class BoardSlot : MonoBehaviour
   private Transform[] slots = default;
 
   [SerializeField]
-  private Image[] upgradeSlots = default;
+  private GameObject upgradeSlotObj = default;
+
+  [SerializeField]
+  private Transform upgradeParent = default;
 
   [SerializeField]  //temporary
   private int ownedCenterSlotIndex = -1;                         //Player's index owned center slot
@@ -22,8 +25,19 @@ public class BoardSlot : MonoBehaviour
   [SerializeField]  //temporary
   private int[] ownedSlotIndex = new int[] { -1, -1, -1, -1 };   //Player's index owned these slot
 
+  private List<Image> upgradeSlots = new List<Image>();
+
   private int playerUpgrade = -1; //Player's index
   private int upgradeCount = 0;
+
+  public void SetupUpdateSlot(int maxSlot)
+  {
+    for (int i = 0; i < maxSlot; i++)
+    {
+      GameObject slot = Instantiate(upgradeSlotObj, upgradeParent);
+      upgradeSlots.Add(slot.GetComponent<Image>());
+    }
+  }
 
   public void MoveToSlot(int playerIndex, Action<Vector2> onMove, Action<int> onSwapInSlot = null)
   {
@@ -80,7 +94,7 @@ public class BoardSlot : MonoBehaviour
 
   public void UpgradeSlot(int playerIndex)
   {
-    if (upgradeCount >= upgradeSlots.Length)
+    if (upgradeCount >= upgradeSlots.Count)
     {
       Debug.Log($"Player {playerIndex} exceed limit upgrade");
       return;
