@@ -117,7 +117,6 @@ public class Monopoly : MonoBehaviour
     //========================================================
 
     int rollCount = 0;
-    int mostDiceIndex = 0;
     bool complete = false;
 
     //order by red blue yellow green [Animation]
@@ -132,7 +131,7 @@ public class Monopoly : MonoBehaviour
         if (diceResult < result)
         {
           diceResult = result;
-          mostDiceIndex = rollCount;
+          playerTurn = rollCount;
         }
 
         rollCount++;
@@ -142,12 +141,12 @@ public class Monopoly : MonoBehaviour
       yield return new WaitUntil(() => complete);
     }
 
-    Debug.Log("First player is " + mostDiceIndex);
+    Debug.Log("First player is " + playerTurn);
 
     //========================================================
 
     int sortCount = 0;
-    int i = mostDiceIndex;
+    int i = playerTurn;
 
     while (sortCount < maxPlayer)
     {
