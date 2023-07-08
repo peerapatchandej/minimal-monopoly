@@ -20,7 +20,10 @@ public class SceneMainMenu : MonoBehaviour
       {
         mainMenu.Setup(resourceLoader, CreateMainMenu, (players) =>
         {
-
+          Monopoly.LoadScene(new Monopoly.State
+          {
+            PlayerSlotIndexes = players
+          });
         });
       }
     });

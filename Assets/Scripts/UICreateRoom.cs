@@ -37,10 +37,6 @@ public class UICreateRoom : MonoBehaviour
     {
       playerSlotIndexes.Sort();
       onLoadGameScene?.Invoke(playerSlotIndexes);
-      foreach (var slot in playerSlotIndexes)
-      {
-        Debug.Log(slot);
-      }
     });
 
     back.onClick.AddListener(() =>

@@ -4,9 +4,17 @@ using UnityEngine;
 using DG.Tweening;
 using System;
 using System.Linq;
+using UnityEngine.SceneManagement;
+using UnityEngine.Events;
+using Unity.VisualScripting;
 
 public class Monopoly : MonoBehaviour
 {
+  public struct State
+  {
+    public List<int> PlayerSlotIndexes;
+  }
+
   [SerializeField]
   private BoardController boardCtrl = default;
 
@@ -22,10 +30,30 @@ public class Monopoly : MonoBehaviour
   [SerializeField]
   private List<PlayerController> playerCtrls = new List<PlayerController>();
 
+  private static State state;
+
   private int maxPlayer = 4;
   private int playerTurn = -1;
   private int diceResult = 0;
   private bool moveNextComplete = false;
+
+  public static void LoadScene(State state)
+  {
+    UnityAction<Scene, LoadSceneMode> onLoaded = null;
+    onLoaded = (arg, mode) =>
+    {
+      OnSceneLoaded(state);
+      SceneManager.sceneLoaded -= onLoaded;
+    };
+
+    SceneManager.sceneLoaded += onLoaded;
+    SceneManager.LoadScene("Game");
+  }
+
+  private static void OnSceneLoaded(State stateParam)
+  {
+    state = stateParam;
+  }
 
   private IEnumerator Start()
   {
