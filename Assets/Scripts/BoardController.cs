@@ -64,9 +64,12 @@ public class BoardController : MonoBehaviour
   private GameObject[] dices = default;
 
   [SerializeField]
+  private PlayerHealth playerHealth = default;
+
+  [SerializeField]
   private List<BoardSlot> boardSlots = new List<BoardSlot>();
 
-  public void CreateBoard(int maxEdge, int maxUpgradeSlot, int diceType, int maxDice, List<int> playerSlotIndexes)
+  public void CreateBoard(int maxEdge, int maxUpgradeSlot, int diceType, int maxDice, int playerHealth, List<int> playerSlotIndexes)
   {
     RectTransform edgeRect = topEdge.GetComponent<RectTransform>();
     RectTransform pawnRect = redCorner.GetComponent<RectTransform>();
@@ -109,6 +112,8 @@ public class BoardController : MonoBehaviour
 
     LayoutRebuilder.ForceRebuildLayoutImmediate(board);
 
+    this.playerHealth.Setup(playerSlotIndexes);
+
     foreach (var index in playerSlotIndexes)
     {
       GameObject pawn = null;
@@ -116,22 +121,24 @@ public class BoardController : MonoBehaviour
       switch ((PlayerType)index)
       {
         case PlayerType.Red:
-          pawn = CreatePawn(pawns[index], redCornerObj.transform);
+          pawn = CreatePawn(pawns[index], redCornerObj.transform, playerHealth);
           pawn.transform.localPosition = new Vector2(pawn.transform.localPosition.x, -pawn.transform.localPosition.x);
           break;
         case PlayerType.Blue:
-          pawn = CreatePawn(pawns[index], blueCornerObj.transform);
+          pawn = CreatePawn(pawns[index], blueCornerObj.transform, playerHealth);
           pawn.transform.localPosition = new Vector2(pawn.transform.localPosition.x, pawn.transform.localPosition.x);
           break;
         case PlayerType.Yellow:
-          pawn = CreatePawn(pawns[index], yellowCornerObj.transform);
+          pawn = CreatePawn(pawns[index], yellowCornerObj.transform, playerHealth);
           pawn.transform.localPosition = new Vector2(pawn.transform.localPosition.x, -pawn.transform.localPosition.x);
           break;
         case PlayerType.Green:
-          pawn = CreatePawn(pawns[index], greenCornerObj.transform);
+          pawn = CreatePawn(pawns[index], greenCornerObj.transform, playerHealth);
           pawn.transform.localPosition = new Vector2(pawn.transform.localPosition.x, pawn.transform.localPosition.x);
           break;
       }
+
+      this.playerHealth.SetHealth(index, playerHealth);
     }
 
     for (int i = 0; i < maxDice; i++)
@@ -191,9 +198,12 @@ public class BoardController : MonoBehaviour
     }
   }
 
-  private GameObject CreatePawn(GameObject obj, Transform parent)
+  private GameObject CreatePawn(GameObject obj, Transform parent, int playerHealth)
   {
     GameObject pawn = Instantiate(obj, parent);
+    PlayerController playerController = pawn.GetComponent<PlayerController>();
+    playerController.Setup(playerHealth);
+
     pawn.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
     pawn.transform.SetParent(pawnParent);
     pawn.transform.localEulerAngles = Vector3.zero;

@@ -64,7 +64,7 @@ public class Monopoly : MonoBehaviour
   {
     onSceneLoaded = () =>
     {
-      boardCtrl.CreateBoard(state.MaxEdge, state.MaxUpgradeSlot, state.DiceType, state.MaxDice, state.PlayerSlotIndexes);
+      boardCtrl.CreateBoard(state.MaxEdge, state.MaxUpgradeSlot, state.DiceType, state.MaxDice, state.PlayerHealth, state.PlayerSlotIndexes);
     };
   }
 
@@ -75,6 +75,8 @@ public class Monopoly : MonoBehaviour
     yield return new WaitForSeconds(1f);
 
     StartCoroutine(SetupPlayer());
+
+    yield return new WaitForSeconds(1f);
 
     //playerCtrls[0].Setup(Const.RED_PLAYER_INDEX);
     //playerCtrls[1].Setup(Const.BLUE_PLAYER_INDEX);

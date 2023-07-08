@@ -9,7 +9,9 @@ public class PlayerController : MonoBehaviour
   [SerializeField]
   public int currentIndex;
 
+  [SerializeField]
   private int health = Const.DEFAULT_HEALTH;
+
   private float moveSpeed = 0.5f;
 
   public void Setup(int health = 0)
