@@ -94,6 +94,12 @@ public class Monopoly : MonoBehaviour
 
     while (true)
     {
+      if (playerCtrls[currentTurn].PlayerLose())
+      {
+        //check from leaderboard list if count of leaderboard == max player - 1 then game end
+        currentTurn++;
+      }
+
       rollComplete = false;
       boardCtrl.SetBorderColor((int)playerCtrls[currentTurn].playerType);
 
@@ -229,14 +235,13 @@ public class Monopoly : MonoBehaviour
           {
             if (playerCtrl.conerIndex == playerCtrl.currentIndex)
             {
-              playerCtrl.UpdateHealth(Const.MAX_HEAL);
+              UpdateHealth(playerCtrl, Const.MAX_HEAL);
             }
             else
             {
-              playerCtrl.UpdateHealth(Const.NORMAL_HEAL);
+              UpdateHealth(playerCtrl, Const.NORMAL_HEAL);
             }
 
-            boardCtrl.SetHealth((int)playerCtrl.playerType, playerCtrl.GetHealth());
             onComplete?.Invoke();
           }
           else if (boardSlot.GetBoardType() == BoardType.Edge)
@@ -246,8 +251,7 @@ public class Monopoly : MonoBehaviour
               boardAction.EnableBuyArea(() =>
               {
                 boardSlot.UpgradeSlot((int)playerCtrl.playerType);
-                playerCtrl.UpdateHealth(-Const.COST_BUY_AREA);
-                boardCtrl.SetHealth((int)playerCtrl.playerType, playerCtrl.GetHealth());
+                UpdateHealth(playerCtrl, -Const.COST_BUY_AREA);
               }, () =>
               {
                 onComplete?.Invoke();
@@ -287,9 +291,7 @@ public class Monopoly : MonoBehaviour
               {
                 //TakeDamage
                 Debug.Log("Take Damage : " + boardSlot.GetUpgradeCount());
-                playerCtrl.UpdateHealth(-boardSlot.GetUpgradeCount());
-                boardCtrl.SetHealth((int)playerCtrl.playerType, playerCtrl.GetHealth());
-
+                UpdateHealth(playerCtrl, -boardSlot.GetUpgradeCount());
                 boardSlot.ResetUpgradeSlot();
                 onComplete?.Invoke();
               }
@@ -321,5 +323,18 @@ public class Monopoly : MonoBehaviour
         onComplete?.Invoke();
       });
     });
+  }
+
+  private void UpdateHealth(PlayerController playerCtrl, int value)
+  {
+    playerCtrl.UpdateHealth(value, () =>
+    {
+      BoardSlot boardSlot = boardCtrl.GetBoardSlot(playerCtrl.currentIndex);
+      boardSlot.ClearOwnedSlot(currentTurn);
+
+      //reset buying area
+    });
+
+    boardCtrl.SetHealth((int)playerCtrl.playerType, playerCtrl.GetHealth());
   }
 }

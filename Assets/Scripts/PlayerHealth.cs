@@ -18,6 +18,7 @@ public class PlayerHealth : MonoBehaviour
 
   public void SetHealth(int index, int health)
   {
-    healthText[index].text = $"Health : {health}";
+    if (health > 0) healthText[index].text = $"Health : {health}";
+    else healthText[index].text = $"Player Lose";
   }
 }

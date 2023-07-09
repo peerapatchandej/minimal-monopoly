@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 using System;
 
@@ -12,10 +13,14 @@ public class PlayerController : MonoBehaviour
   [SerializeField]
   private int health = Const.DEFAULT_HEALTH;
 
+  [SerializeField]
+  private Image image = default;
+
   public PlayerType playerType { get; private set; }
   public int conerIndex { get; private set; }
 
   private float moveSpeed = 0.5f;
+  private bool playerLose = false;
 
   public void Setup(PlayerType playerType, int health, int index)
   {
@@ -34,14 +39,24 @@ public class PlayerController : MonoBehaviour
     });
   }
 
-  public void UpdateHealth(int health)
+  public void UpdateHealth(int health, Action onLose)
   {
     this.health += health;
+    if (health <= 0)
+    {
+      playerLose = true;
+      onLose?.Invoke();
+    }
   }
 
   public int GetHealth()
   {
     return health;
+  }
+
+  public bool PlayerLose()
+  {
+    return playerLose;
   }
 
   private void SetIndex(int index)
