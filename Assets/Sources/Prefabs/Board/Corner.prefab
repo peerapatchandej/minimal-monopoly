@@ -91,12 +91,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd8e30b32c1e8644eaa7f33c12a0f955, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
   centerSlot: {fileID: 1291910757306874249}
   slots:
   - {fileID: 4288232633193985816}
   - {fileID: 3051756397232375825}
   - {fileID: 5685368772086097525}
   - {fileID: 2844905597042003542}
+  upgradeSlotObj: {fileID: 0}
+  upgradeParent: {fileID: 0}
+  ownedCenterSlotIndex: -1
+  ownedSlotIndex: ffffffffffffffffffffffffffffffff
+  playerUpgrade: -1
+  upgradeCount: 0
 --- !u!1 &5159198007481035782
 GameObject:
   m_ObjectHideFlags: 0
@@ -170,6 +177,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5502016828814344699}
     m_Modifications:
+    - target: {fileID: 2217918961756182916, guid: 66969de2d8a036945bbb5b03c043074e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4287320124886931123, guid: 66969de2d8a036945bbb5b03c043074e, type: 3}
       propertyPath: m_Name
       value: Slot
@@ -276,6 +287,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5502016828814344699}
     m_Modifications:
+    - target: {fileID: 2217918961756182916, guid: 66969de2d8a036945bbb5b03c043074e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4287320124886931123, guid: 66969de2d8a036945bbb5b03c043074e, type: 3}
       propertyPath: m_Name
       value: Slot
@@ -382,6 +397,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5502016828814344699}
     m_Modifications:
+    - target: {fileID: 2217918961756182916, guid: 66969de2d8a036945bbb5b03c043074e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4287320124886931123, guid: 66969de2d8a036945bbb5b03c043074e, type: 3}
       propertyPath: m_Name
       value: Slot
@@ -488,6 +507,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5502016828814344699}
     m_Modifications:
+    - target: {fileID: 2217918961756182916, guid: 66969de2d8a036945bbb5b03c043074e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4287320124886931123, guid: 66969de2d8a036945bbb5b03c043074e, type: 3}
       propertyPath: m_Name
       value: Slot
@@ -594,6 +617,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7378753996882428516}
     m_Modifications:
+    - target: {fileID: 2217918961756182916, guid: 66969de2d8a036945bbb5b03c043074e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4287320124886931123, guid: 66969de2d8a036945bbb5b03c043074e, type: 3}
       propertyPath: m_Name
       value: Slot

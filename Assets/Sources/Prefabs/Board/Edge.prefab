@@ -168,6 +168,8 @@ MonoBehaviour:
   upgradeParent: {fileID: 2419318521127628191}
   ownedCenterSlotIndex: -1
   ownedSlotIndex: ffffffffffffffffffffffffffffffff
+  playerUpgrade: -1
+  upgradeCount: 0
 --- !u!1 &8740849221424048983
 GameObject:
   m_ObjectHideFlags: 0
@@ -237,6 +239,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4423710987790632601}
     m_Modifications:
+    - target: {fileID: 2217918961756182916, guid: 66969de2d8a036945bbb5b03c043074e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4287320124886931123, guid: 66969de2d8a036945bbb5b03c043074e, type: 3}
       propertyPath: m_Name
       value: Slot
@@ -343,6 +349,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4423710987790632601}
     m_Modifications:
+    - target: {fileID: 2217918961756182916, guid: 66969de2d8a036945bbb5b03c043074e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4287320124886931123, guid: 66969de2d8a036945bbb5b03c043074e, type: 3}
       propertyPath: m_Name
       value: Slot
@@ -449,6 +459,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2625190124397570680}
     m_Modifications:
+    - target: {fileID: 2217918961756182916, guid: 66969de2d8a036945bbb5b03c043074e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4287320124886931123, guid: 66969de2d8a036945bbb5b03c043074e, type: 3}
       propertyPath: m_Name
       value: Slot
@@ -555,6 +569,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4423710987790632601}
     m_Modifications:
+    - target: {fileID: 2217918961756182916, guid: 66969de2d8a036945bbb5b03c043074e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4287320124886931123, guid: 66969de2d8a036945bbb5b03c043074e, type: 3}
       propertyPath: m_Name
       value: Slot
@@ -661,6 +679,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4423710987790632601}
     m_Modifications:
+    - target: {fileID: 2217918961756182916, guid: 66969de2d8a036945bbb5b03c043074e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4287320124886931123, guid: 66969de2d8a036945bbb5b03c043074e, type: 3}
       propertyPath: m_Name
       value: Slot
