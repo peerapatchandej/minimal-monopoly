@@ -29,19 +29,12 @@ public class BoardSlot : MonoBehaviour
   [SerializeField]
   private Image outline = default;
 
-  [SerializeField]  //temporary
   private int ownedCenterSlotIndex = -1;
-
-  [SerializeField]  //temporary
   private int[] ownedSlotIndex = new int[] { -1, -1, -1, -1 };
+  private int playerUpgrade = -1;
+  private int upgradeCount = 0;
 
   private List<Image> upgradeSlots = new List<Image>();
-
-  [SerializeField] //temporary
-  private int playerUpgrade = -1;
-
-  [SerializeField] //temporary
-  private int upgradeCount = 0;
 
   public void SetupUpdateSlot(int maxSlot)
   {
@@ -132,7 +125,6 @@ public class BoardSlot : MonoBehaviour
     outline.DOColor(color, 1f);
   }
 
-  //for check take damage and owner
   public bool SlotHasUpgrade()
   {
     return playerUpgrade != -1;

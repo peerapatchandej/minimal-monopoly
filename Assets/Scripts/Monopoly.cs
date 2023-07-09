@@ -7,8 +7,6 @@ using System.Linq;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using UnityEngine.UI;
-using System.Resources;
-using System.Reflection;
 
 public class Monopoly : MonoBehaviour
 {
@@ -198,7 +196,6 @@ public class Monopoly : MonoBehaviour
       if (currentTurn >= state.PlayerSlotIndexes.Count) currentTurn = 0;
     }
 
-    // show result dialog
     state.ResourceLoader.LoadAndCreateUI("ScoreDialog", (obj) =>
     {
       UIScoreDialog dialog = obj.GetComponent<UIScoreDialog>();
@@ -219,12 +216,9 @@ public class Monopoly : MonoBehaviour
       playerCtrlsTemp.Add(playerCtrl);
     }
 
-    //========================================================
-
     int rollCount = 0;
     bool complete = false;
 
-    //order by red blue yellow green [Animation]
     while (rollCount < state.PlayerSlotIndexes.Count)
     {
       boardCtrl.SetBorderColor(state.PlayerSlotIndexes[rollCount].Index);
@@ -232,8 +226,6 @@ public class Monopoly : MonoBehaviour
 
       Action<int> onResult = (result) =>
       {
-        Debug.Log("Dice result : " + result);
-
         if (diceResult < result)
         {
           diceResult = result;
@@ -262,10 +254,6 @@ public class Monopoly : MonoBehaviour
       yield return new WaitUntil(() => complete);
       yield return new WaitForSeconds(1f);
     }
-
-    Debug.Log("First player is " + playerTurnIndex);
-
-    //========================================================
 
     int sortCount = 0;
     int i = playerTurnIndex;
@@ -304,20 +292,17 @@ public class Monopoly : MonoBehaviour
   {
     PlayerController playerCtrl = playerCtrls[currentTurn];
 
-    //Clear old owned slot
     int previousIndex = playerCtrl.currentIndex - 1;
     BoardSlot boardSlot = boardCtrl.GetBoardSlot(previousIndex >= 0 ? previousIndex : boardCtrl.GetBoardSlotCount() - 1);
     boardSlot.ClearOwnedSlot(currentTurn);
 
     int nextIndex = playerCtrl.currentIndex + 1;
 
-    //ถ้าเดินจนวนสนามแล้วจะรีเซ็ต index
     if (nextIndex >= boardCtrl.GetBoardSlotCount())
     {
       nextIndex = 0;
     }
 
-    //ก่อนทีจะ move ต้องเช็ค player ในช่องก่อนหน้าก่อนว่ามีมั้ย ถ้ามีก็ให้ player ในช่องนั้น swap in slot
     boardSlot = boardCtrl.GetBoardSlot(nextIndex);
     boardSlot.MoveToSlot(currentTurn, (position) =>
     {
@@ -329,7 +314,6 @@ public class Monopoly : MonoBehaviour
 
         if (diceResult == 0)
         {
-          //Clear old owned slot
           previousIndex = playerCtrl.currentIndex - 1;
           boardSlot = boardCtrl.GetBoardSlot(previousIndex >= 0 ? previousIndex : boardCtrl.GetBoardSlotCount() - 1);
           boardSlot.ClearOwnedSlot(currentTurn);
@@ -382,7 +366,6 @@ public class Monopoly : MonoBehaviour
 
             if (!boardSlot.SlotHasUpgrade())
             {
-              //buy area first time
               onBuyArea.Invoke();
             }
             else
@@ -391,18 +374,15 @@ public class Monopoly : MonoBehaviour
               {
                 if (boardSlot.CanUpgradeArea())
                 {
-                  //upgrade area
                   onBuyArea.Invoke();
                 }
                 else
                 {
-                  //auto turn end (max upgraded)
                   onComplete?.Invoke();
                 }
               }
               else
               {
-                //TakeDamage
                 UpdateHealth(playerCtrl, -boardSlot.GetUpgradeCount());
                 playerCtrl.TakeDamage();
                 boardSlot.ResetUpgradeSlot();

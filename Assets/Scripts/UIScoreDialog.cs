@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,10 +14,19 @@ public class UIScoreDialog : MonoBehaviour
   private Transform parent = default;
 
   [SerializeField]
+  private  Transform panel = default;
+
+  [SerializeField]
   private Button rematch = default;
 
   [SerializeField]
   private Button mainMenu = default;
+
+  private IEnumerator Start()
+  {
+    yield return new WaitForEndOfFrame();
+    panel.DOScale(1, 0.3f);
+  }
 
   public void Setup(List<PlayerColor> scoreList, Action onRematch, Action onMainMenu)
   {

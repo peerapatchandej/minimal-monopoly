@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public enum BoardType
 {
   Corner,
@@ -15,11 +11,6 @@ public enum OwnedSlotType
   Three,
   Four,
   Center
-}
-
-public enum CenterAreaPage
-{
-  Dice
 }
 
 public enum PlayerColor

@@ -7,9 +7,6 @@ using System;
 
 public class PlayerController : MonoBehaviour
 {
-  [SerializeField]  //temporary
-  public int currentIndex;
-
   [SerializeField]
   private int health = Const.DEFAULT_HEALTH;
 
@@ -25,6 +22,8 @@ public class PlayerController : MonoBehaviour
   public PlayerColor playerColor { get; private set; }
   public PlayerType playerType { get; private set; }
   public int conerIndex { get; private set; }
+
+  public int currentIndex;
 
   private float moveSpeed = 0.3f;
   private bool playerLose = false;
