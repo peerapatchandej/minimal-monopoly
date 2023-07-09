@@ -81,98 +81,35 @@ public class Monopoly : MonoBehaviour
 
     yield return new WaitUntil(() => initPlayer);
 
-    rollComplete = false;
-    boardCtrl.SetBorderColor(state.PlayerSlotIndexes[playerTurnIndex]);
-
-    RollDice((result) =>
+    while (true)
     {
-      diceResult = result;
-      rollComplete = true;
-    });
+      rollComplete = false;
+      boardCtrl.SetBorderColor((int)playerCtrls[currentTurn].playerType);
 
-    yield return new WaitUntil(() => rollComplete);
-
-    while (diceResult > 0)
-    {
-      MoveNextSlot(() =>
+      RollDice((result) =>
       {
-        moveNextComplete = true;
-        diceResult--;
+        diceResult = result;
+        rollComplete = true;
       });
 
-      yield return new WaitUntil(() => moveNextComplete);
+      yield return new WaitUntil(() => rollComplete);
 
-      moveNextComplete = false;
+      while (diceResult > 0)
+      {
+        MoveNextSlot(() =>
+        {
+          moveNextComplete = true;
+          diceResult--;
+        });
+
+        yield return new WaitUntil(() => moveNextComplete);
+
+        moveNextComplete = false;
+      }
+
+      currentTurn++;
+      if (currentTurn >= state.PlayerSlotIndexes.Count) currentTurn = 0;
     }
-
-    //playerCtrls[0].Setup(Const.RED_PLAYER_INDEX);
-    //playerCtrls[1].Setup(Const.BLUE_PLAYER_INDEX);
-
-    //yield return new WaitForSeconds(1f);
-
-    //playerTurn = 0;
-    //diceResult = 1;
-
-    //while (diceResult > 0)
-    //{
-    //  MoveNextSlot(() =>
-    //  {
-    //    moveNextComplete = true;
-    //    diceResult--;
-    //  });
-
-    //  yield return new WaitUntil(() => moveNextComplete);
-
-    //  moveNextComplete = false;
-    //}
-
-    //diceResult = 20;
-
-    //while (diceResult > 0)
-    //{
-    //  MoveNextSlot(() =>
-    //  {
-    //    moveNextComplete = true;
-    //    diceResult--;
-    //  });
-
-    //  yield return new WaitUntil(() => moveNextComplete);
-
-    //  moveNextComplete = false;
-    //}
-
-    //diceResult = 20;
-
-    //while (diceResult > 0)
-    //{
-    //  MoveNextSlot(() =>
-    //  {
-    //    moveNextComplete = true;
-    //    diceResult--;
-    //  });
-
-    //  yield return new WaitUntil(() => moveNextComplete);
-
-    //  moveNextComplete = false;
-    //}
-
-    //=======================================================================
-
-    //playerTurn = 1;
-    //diceResult = 16;
-
-    //while (diceResult > 0)
-    //{
-    //  MoveNextSlot(() =>
-    //  {
-    //    moveNextComplete = true;
-    //    diceResult--;
-    //  });
-
-    //  yield return new WaitUntil(() => moveNextComplete);
-
-    //  moveNextComplete = false;
-    //}
   }
 
   private IEnumerator SetupPlayer()
@@ -269,29 +206,34 @@ public class Monopoly : MonoBehaviour
         onComplete?.Invoke();
         if (diceResult == 0)
         {
+          //Clear old owned slot
+          previousIndex = playerCtrls[currentTurn].currentIndex - 1;
+          boardSlot = boardCtrl.GetBoardSlot(previousIndex >= 0 ? previousIndex : boardCtrl.GetBoardSlotCount() - 1);
+          boardSlot.ClearOwnedSlot(currentTurn);
+
           //Debug.Log($"currentIndex : {playerCtrls[playerTurn].currentIndex}");
 
           //Action upgrade
           //check is corner then heal
           //else select upgrade or take damage
 
-          if (!boardSlot.SlotHasUpgrade())
-          {
-            boardSlot.UpgradeSlot(currentTurn);
-          }
-          else
-          {
-            if (boardSlot.CheckOwner(currentTurn))
-            {
-              boardSlot.UpgradeSlot(currentTurn);
-            }
-            else
-            {
-              Debug.Log("Take Damage");
-              boardSlot.ResetUpgradeSlot();
-              //TakeDamage
-            }
-          }
+          //if (!boardSlot.SlotHasUpgrade())
+          //{
+          //  boardSlot.UpgradeSlot(currentTurn);
+          //}
+          //else
+          //{
+          //  if (boardSlot.CheckOwner(currentTurn))
+          //  {
+          //    boardSlot.UpgradeSlot(currentTurn);
+          //  }
+          //  else
+          //  {
+          //    Debug.Log("Take Damage");
+          //    boardSlot.ResetUpgradeSlot();
+          //    //TakeDamage
+          //  }
+          //}
         }
       });
     }, (otherPlayer) =>

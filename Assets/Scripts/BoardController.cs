@@ -124,25 +124,25 @@ public class BoardController : MonoBehaviour
         case PlayerType.Red:
           pawn = CreatePawn(pawns[index], redCornerObj.transform);
           playerController = pawn.GetComponent<PlayerController>();
-          playerController.Setup(playerHealth, 0);
+          playerController.Setup((PlayerType)index, playerHealth, 0);
           pawn.transform.localPosition = new Vector2(pawn.transform.localPosition.x, -pawn.transform.localPosition.x);
           break;
         case PlayerType.Blue:
           pawn = CreatePawn(pawns[index], blueCornerObj.transform);
           playerController = pawn.GetComponent<PlayerController>();
-          playerController.Setup(playerHealth, maxEdge + 1);
+          playerController.Setup((PlayerType)index, playerHealth, maxEdge + 1);
           pawn.transform.localPosition = new Vector2(pawn.transform.localPosition.x, pawn.transform.localPosition.x);
           break;
         case PlayerType.Yellow:
           pawn = CreatePawn(pawns[index], yellowCornerObj.transform);
           playerController = pawn.GetComponent<PlayerController>();
-          playerController.Setup(playerHealth, (maxEdge + 1) * 2);
+          playerController.Setup((PlayerType)index, playerHealth, (maxEdge + 1) * 2);
           pawn.transform.localPosition = new Vector2(pawn.transform.localPosition.x, -pawn.transform.localPosition.x);
           break;
         case PlayerType.Green:
           pawn = CreatePawn(pawns[index], greenCornerObj.transform);
           playerController = pawn.GetComponent<PlayerController>();
-          playerController.Setup(playerHealth, (maxEdge + 1) * 3);
+          playerController.Setup((PlayerType)index, playerHealth, (maxEdge + 1) * 3);
           pawn.transform.localPosition = new Vector2(pawn.transform.localPosition.x, pawn.transform.localPosition.x);
           break;
       }

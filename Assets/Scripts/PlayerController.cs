@@ -12,10 +12,12 @@ public class PlayerController : MonoBehaviour
   [SerializeField]
   private int health = Const.DEFAULT_HEALTH;
 
+  public PlayerType playerType { get; private set; }
   private float moveSpeed = 0.5f;
 
-  public void Setup(int health, int index)
+  public void Setup(PlayerType playerType, int health, int index)
   {
+    this.playerType = playerType;
     this.health = health;
     SetIndex(index);
   }
