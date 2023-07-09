@@ -23,7 +23,7 @@ public class UIMainMenu : MonoBehaviour
           UICreateRoom createRoom = obj.GetComponent<UICreateRoom>();
           if (createRoom)
           {
-            createRoom.Setup(onCreateMainMenu, onLoadGameScene);
+            createRoom.Setup(resourceLoader, onCreateMainMenu, onLoadGameScene);
           }
         });
         createRoom.interactable = false;

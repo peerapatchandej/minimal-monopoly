@@ -34,7 +34,7 @@ public class UICreateRoom : MonoBehaviour
   private List<int> playerSlotIndexes = new List<int>();
   private int playerCount = 0;
 
-  public void Setup(Action onCreateMainMenu, Action<Monopoly.State> onLoadGameScene)
+  public void Setup(ResourceLoader resourceLoader, Action onCreateMainMenu, Action<Monopoly.State> onLoadGameScene)
   {
     foreach (var slot in playerSlots)
     {
@@ -61,6 +61,7 @@ public class UICreateRoom : MonoBehaviour
       playerSlotIndexes.Sort();
       onLoadGameScene?.Invoke(new Monopoly.State
       {
+        ResourceLoader = resourceLoader,
         PlayerSlotIndexes = playerSlotIndexes,
         PlayerHealth = healthSetting.GetValue(),
         MaxEdge = edgeSetting.GetValue(),

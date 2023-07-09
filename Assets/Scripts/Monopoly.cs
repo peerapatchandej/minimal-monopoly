@@ -6,14 +6,14 @@ using System;
 using System.Linq;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
-using Unity.VisualScripting;
-using System.Numerics;
 using UnityEngine.UI;
+using System.Resources;
 
 public class Monopoly : MonoBehaviour
 {
   public struct State
   {
+    public ResourceLoader ResourceLoader;
     public List<int> PlayerSlotIndexes;
     public int PlayerHealth;
     public int MaxEdge;
@@ -136,6 +136,14 @@ public class Monopoly : MonoBehaviour
     }
 
     // show result dialog
+    state.ResourceLoader.LoadAndCreateUI("ScoreDialog", (obj) =>
+    {
+      UIScoreDialog dialog = obj.GetComponent<UIScoreDialog>();
+      dialog.Setup(scoreList, () =>
+      {
+        LoadScene(state);
+      }, state.OnLoadSceneMainMenu);
+    });
   }
 
   private IEnumerator SetupPlayer()
@@ -300,7 +308,6 @@ public class Monopoly : MonoBehaviour
               else
               {
                 //TakeDamage
-                Debug.Log("Take Damage : " + boardSlot.GetUpgradeCount());
                 UpdateHealth(playerCtrl, -boardSlot.GetUpgradeCount());
                 boardSlot.ResetUpgradeSlot();
                 onComplete?.Invoke();
