@@ -41,20 +41,19 @@ public class UICreateRoom : MonoBehaviour
       slot.Setup((index) =>
       {
         playerCount++;
-        UpdateStartButton();
         playerSlotIndexes.Add(new SelectedPlayerData { Index = index, Type = PlayerType.Player });
+        UpdateStartButton();
       }, (index) =>
       {
         playerCount++;
-        UpdateStartButton();
         playerSlotIndexes.Add(new SelectedPlayerData { Index = index, Type = PlayerType.AI });
+        UpdateStartButton();
       }, (index) =>
       {
         playerCount--;
-        UpdateStartButton();
-
         int foundedIndex = playerSlotIndexes.FindIndex(x => x.Index == index);
         if (foundedIndex != -1) playerSlotIndexes.RemoveAt(foundedIndex);
+        UpdateStartButton();
       });
     }
 
@@ -89,6 +88,7 @@ public class UICreateRoom : MonoBehaviour
 
   private void UpdateStartButton()
   {
-    startGame.interactable = playerCount >= Const.MIN_PLAYER;
+    int havePlayer = playerSlotIndexes.FindIndex(x => x.Type == PlayerType.Player);
+    startGame.interactable = playerCount >= Const.MIN_PLAYER && havePlayer != -1;
   }
 }
