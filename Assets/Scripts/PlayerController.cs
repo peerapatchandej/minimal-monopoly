@@ -16,6 +16,9 @@ public class PlayerController : MonoBehaviour
   [SerializeField]
   private Image image = default;
 
+  [SerializeField]
+  private Image fxUpgrade = default;
+
   public PlayerColor playerColor { get; private set; }
   public PlayerType playerType { get; private set; }
   public int conerIndex { get; private set; }
@@ -60,6 +63,35 @@ public class PlayerController : MonoBehaviour
   public bool PlayerLose()
   {
     return playerLose;
+  }
+
+  public void UpgradeSlot()
+  {
+    Color color = default;
+
+    switch (playerColor)
+    {
+      case PlayerColor.Red:
+        color = Const.RED_COLOR;
+        break;
+      case PlayerColor.Blue:
+        color = Const.BLUE_COLOR;
+        break;
+      case PlayerColor.Yellow:
+        color = Const.YELLOW_COLOR;
+        break;
+      case PlayerColor.Green:
+        color = Const.GREEN_COLOR;
+        break;
+    }
+
+    fxUpgrade.gameObject.SetActive(true);
+    fxUpgrade.color = color;
+    fxUpgrade.DOFade(0f, 1f);
+    fxUpgrade.transform.DOLocalMoveY(113f, 1f).OnComplete(() =>
+    {
+      fxUpgrade.transform.localPosition = Vector3.zero;
+    });
   }
 
   private void SetIndex(int index)

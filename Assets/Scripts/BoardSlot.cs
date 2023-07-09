@@ -167,23 +167,25 @@ public class BoardSlot : MonoBehaviour
 
   public void ChangeColor(PlayerColor playerColor)
   {
+    background.DOColor(GetColor(playerColor), 0.01f);
+    StartCoroutine(Delay(0.1f, () => { background.DOColor(Color.white, 0.01f); }));
+  }
+
+  private Color GetColor(PlayerColor playerColor)
+  {
     switch (playerColor)
     {
       case PlayerColor.Red:
-        background.DOColor(Const.RED_COLOR, 0.01f);
-        break;
+        return Const.RED_COLOR;
       case PlayerColor.Blue:
-        background.DOColor(Const.BLUE_COLOR, 0.01f);
-        break;
+        return Const.BLUE_COLOR;
       case PlayerColor.Yellow:
-        background.DOColor(Const.YELLOW_COLOR, 0.01f);
-        break;
+        return Const.YELLOW_COLOR;
       case PlayerColor.Green:
-        background.DOColor(Const.GREEN_COLOR, 0.01f);
-        break;
+        return Const.GREEN_COLOR;
     }
 
-    StartCoroutine(Delay(0.1f, () => { background.DOColor(Color.white, 0.01f); }));
+    return Color.white;
   }
 
   private IEnumerator Delay(float delay, Action callback)

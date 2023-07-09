@@ -356,6 +356,7 @@ public class Monopoly : MonoBehaviour
               {
                 boardAction.EnableBuyArea(() =>
                 {
+                  playerCtrl.UpgradeSlot();
                   boardSlot.UpgradeSlot((int)playerCtrl.playerColor);
                   UpdateHealth(playerCtrl, -Const.COST_BUY_AREA);
                 }, () =>
@@ -367,6 +368,7 @@ public class Monopoly : MonoBehaviour
               {
                 if (playerCtrl.GetHealth() > 1)
                 {
+                  playerCtrl.UpgradeSlot();
                   boardSlot.UpgradeSlot((int)playerCtrl.playerColor);
                   UpdateHealth(playerCtrl, -Const.COST_BUY_AREA);
                   onComplete?.Invoke();
