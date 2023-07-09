@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using System.Resources;
+using System.Reflection;
 
 public class Monopoly : MonoBehaviour
 {
@@ -129,6 +130,35 @@ public class Monopoly : MonoBehaviour
         scoreList.Reverse();
         break;
       }
+
+      state.ResourceLoader.LoadAndCreateUI("Fx/FxTurnBegin", (obj) =>
+      {
+        FxTurnBegin fxTurnBegin = obj.GetComponent<FxTurnBegin>();
+        Color color = default;
+        string turn = "";
+
+        switch (playerCtrls[currentTurn].playerColor)
+        {
+          case PlayerColor.Red:
+            color = Const.RED_COLOR;
+            turn = "Red Player Turn";
+            break;
+          case PlayerColor.Blue:
+            color = Const.BLUE_COLOR;
+            turn = "Blue Player Turn";
+            break;
+          case PlayerColor.Yellow:
+            color = Const.YELLOW_COLOR;
+            turn = "Yellow Player Turn";
+            break;
+          case PlayerColor.Green:
+            color = Const.GREEN_COLOR;
+            turn = "Green Player Turn";
+            break;
+        }
+
+        fxTurnBegin.Setup(color, turn);
+      });
 
       rollComplete = false;
       boardCtrl.SetBorderColor((int)playerCtrls[currentTurn].playerColor);
