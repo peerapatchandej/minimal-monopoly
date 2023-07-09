@@ -20,9 +20,34 @@ public class UIScoreDialog : MonoBehaviour
 
   public void Setup(List<PlayerColor> scoreList, Action onRematch, Action onMainMenu)
   {
-    foreach (var score in scoreList)
+    for (int i = 0; i < scoreList.Count; i++)
     {
       GameObject obj = Instantiate(scoreListObj, parent);
+      Score score = obj.GetComponent<Score>();
+      Color color = default;
+      string playerName = "";
+
+      switch (scoreList[i])
+      {
+        case PlayerColor.Red:
+          color = Const.RED_COLOR;
+          playerName = "Red Player";
+          break;
+        case PlayerColor.Blue:
+          color = Const.BLUE_COLOR;
+          playerName = "Blue Player";
+          break;
+        case PlayerColor.Yellow:
+          color = Const.YELLOW_COLOR;
+          playerName = "Yellow Player";
+          break;
+        case PlayerColor.Green:
+          color = Const.GREEN_COLOR;
+          playerName = "Green Player";
+          break;
+      }
+
+      score.Setup(i + 1, color, playerName);
     }
 
     rematch.onClick.AddListener(() =>
