@@ -12,7 +12,7 @@ public class PlayerHealth : MonoBehaviour
   {
     for (int i = 0; i < playerSlotIndex.Count; i++)
     {
-      healthText[i].gameObject.SetActive(true);
+      healthText[playerSlotIndex[i]].gameObject.SetActive(true);
     }
   }
 

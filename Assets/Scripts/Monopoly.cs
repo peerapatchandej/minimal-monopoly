@@ -246,14 +246,26 @@ public class Monopoly : MonoBehaviour
               boardAction.EnableBuyArea(() =>
               {
                 boardSlot.UpgradeSlot((int)playerCtrl.playerType);
+                playerCtrl.UpdateHealth(-Const.COST_BUY_AREA);
+                boardCtrl.SetHealth((int)playerCtrl.playerType, playerCtrl.GetHealth());
               }, () =>
               {
                 onComplete?.Invoke();
               });
+
+              //if (playerCtrl.GetHealth() > 1) //ถ้าเป็น AI จะ auto buy แต่เพิ่มเงื่อนไขการเช็คเข้าไปอีกว่า มีเลือดมากกว่า 50% ของจำนวน max upgrade รึเปล่า
+              //{
+
+              //}
+              //else
+              //{
+              //onComplete?.Invoke();
+              //}
             };
 
             if (!boardSlot.SlotHasUpgrade())
             {
+              //buy area first time
               onBuyArea.Invoke();
             }
             else
@@ -262,18 +274,23 @@ public class Monopoly : MonoBehaviour
               {
                 if (boardSlot.CanUpgradeArea())
                 {
+                  //upgrade area
                   onBuyArea.Invoke();
                 }
                 else
                 {
+                  //auto turn end (max upgraded)
                   onComplete?.Invoke();
                 }
               }
               else
               {
                 //TakeDamage
-                Debug.Log("Take Damage");
-                //boardSlot.ResetUpgradeSlot();
+                Debug.Log("Take Damage : " + boardSlot.GetUpgradeCount());
+                playerCtrl.UpdateHealth(-boardSlot.GetUpgradeCount());
+                boardCtrl.SetHealth((int)playerCtrl.playerType, playerCtrl.GetHealth());
+
+                boardSlot.ResetUpgradeSlot();
                 onComplete?.Invoke();
               }
             }

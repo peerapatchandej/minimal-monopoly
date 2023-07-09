@@ -142,6 +142,11 @@ public class BoardSlot : MonoBehaviour
     }
   }
 
+  public int GetUpgradeCount()
+  {
+    return upgradeCount;
+  }
+
   public BoardType GetBoardType()
   {
     return type;

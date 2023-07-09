@@ -21,4 +21,6 @@ public class Const
 
   public static readonly int MAX_HEAL = 3;
   public static readonly int NORMAL_HEAL = 1;
+
+  public static readonly int COST_BUY_AREA = 1;
 }
