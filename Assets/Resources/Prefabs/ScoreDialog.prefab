@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 4872070876114912576}
   - component: {fileID: 4228383273870658717}
   - component: {fileID: 204166569688349850}
+  - component: {fileID: 5504399760304380350}
   m_Layer: 5
   m_Name: ScoreDialog
   m_TagString: Untagged
@@ -157,7 +158,7 @@ RectTransform:
   - {fileID: 876492159248560027}
   - {fileID: 6049121564351990513}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -243,6 +244,18 @@ MonoBehaviour:
   parent: {fileID: 4810076932036137811}
   rematch: {fileID: 4063479115298084065}
   mainMenu: {fileID: 6658053766273125347}
+--- !u!114 &5504399760304380350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3015901988995996404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f4ea9e00708e8e4e92a9f519be9e7db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3139696862906834328
 GameObject:
   m_ObjectHideFlags: 0

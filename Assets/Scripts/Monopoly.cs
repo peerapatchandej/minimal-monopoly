@@ -86,11 +86,31 @@ public class Monopoly : MonoBehaviour
 
   private IEnumerator Start()
   {
-    //Play Start Match Animation
+    yield return new WaitForEndOfFrame();
+
+    FxStartGame fxStartGame = null;
+    state.ResourceLoader.LoadAndCreateUI("Fx/FxStartGame", (obj) =>
+    {
+      fxStartGame = obj.GetComponent<FxStartGame>();
+      fxStartGame.Setup();
+    });
 
     yield return new WaitForSeconds(1f);
 
-    StartCoroutine(SetupPlayer());
+    Destroy(fxStartGame.gameObject);
+
+    FxFindFirstPlayer fxFindFirstPlayer = null;
+    state.ResourceLoader.LoadAndCreateUI("Fx/FxFindFirstPlayer", (obj) =>
+    {
+      fxFindFirstPlayer = obj.GetComponent<FxFindFirstPlayer>();
+      fxFindFirstPlayer.Setup(() =>
+      {
+        StartCoroutine(SetupPlayer(() =>
+        {
+          Destroy(fxFindFirstPlayer.gameObject);
+        }));
+      });
+    });
 
     yield return new WaitUntil(() => initPlayer);
 
@@ -159,7 +179,7 @@ public class Monopoly : MonoBehaviour
     });
   }
 
-  private IEnumerator SetupPlayer()
+  private IEnumerator SetupPlayer(Action callback)
   {
     List<PlayerController> playerCtrlsTemp = new List<PlayerController>();
 
@@ -236,6 +256,7 @@ public class Monopoly : MonoBehaviour
     }
 
     playerCtrlsTemp.Clear();
+    callback?.Invoke();
     initPlayer = true;
   }
 
