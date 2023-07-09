@@ -42,9 +42,10 @@ public class PlayerController : MonoBehaviour
   public void UpdateHealth(int health, Action onLose)
   {
     this.health += health;
-    if (health <= 0)
+    if (this.health <= 0)
     {
       playerLose = true;
+      image.color = new Color(image.color.r, image.color.g, image.color.b, 0f);
       onLose?.Invoke();
     }
   }

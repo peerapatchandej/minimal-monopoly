@@ -237,4 +237,12 @@ public class BoardController : MonoBehaviour
   {
     playerHealth.SetHealth(index, health);
   }
+
+  public void ClearAllBuyAreaWithPlayer(int index)
+  {
+    foreach (var slot in boardSlots)
+    {
+      if (slot.CheckOwner(index)) slot.ResetUpgradeSlot();
+    }
+  }
 }

@@ -331,8 +331,7 @@ public class Monopoly : MonoBehaviour
     {
       BoardSlot boardSlot = boardCtrl.GetBoardSlot(playerCtrl.currentIndex);
       boardSlot.ClearOwnedSlot(currentTurn);
-
-      //reset buying area
+      boardCtrl.ClearAllBuyAreaWithPlayer((int)playerCtrl.playerType);
     });
 
     boardCtrl.SetHealth((int)playerCtrl.playerType, playerCtrl.GetHealth());
