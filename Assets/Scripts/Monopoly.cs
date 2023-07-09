@@ -299,23 +299,26 @@ public class Monopoly : MonoBehaviour
           {
             Action onBuyArea = () =>
             {
-              boardAction.EnableBuyArea(() =>
+              if (playerCtrl.playerType == PlayerType.Player)
               {
-                boardSlot.UpgradeSlot((int)playerCtrl.playerColor);
-                UpdateHealth(playerCtrl, -Const.COST_BUY_AREA);
-              }, () =>
+                boardAction.EnableBuyArea(() =>
+                {
+                  boardSlot.UpgradeSlot((int)playerCtrl.playerColor);
+                  UpdateHealth(playerCtrl, -Const.COST_BUY_AREA);
+                }, () =>
+                {
+                  onComplete?.Invoke();
+                });
+              }
+              else if (playerCtrl.playerType == PlayerType.AI)
               {
-                onComplete?.Invoke();
-              });
-
-              //if (playerCtrl.GetHealth() > 1) //ถ้าเป็น AI จะ auto buy แต่เพิ่มเงื่อนไขการเช็คเข้าไปอีกว่า มีเลือดมากกว่า 50% ของจำนวน max upgrade รึเปล่า
-              //{
-
-              //}
-              //else
-              //{
-              //onComplete?.Invoke();
-              //}
+                if (playerCtrl.GetHealth() > 1)
+                {
+                  boardSlot.UpgradeSlot((int)playerCtrl.playerColor);
+                  UpdateHealth(playerCtrl, -Const.COST_BUY_AREA);
+                  onComplete?.Invoke();
+                }
+              }
             };
 
             if (!boardSlot.SlotHasUpgrade())
