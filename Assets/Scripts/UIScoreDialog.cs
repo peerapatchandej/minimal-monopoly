@@ -18,7 +18,7 @@ public class UIScoreDialog : MonoBehaviour
   [SerializeField]
   private Button mainMenu = default;
 
-  public void Setup(List<PlayerType> scoreList, Action onRematch, Action onMainMenu)
+  public void Setup(List<PlayerColor> scoreList, Action onRematch, Action onMainMenu)
   {
     foreach (var score in scoreList)
     {

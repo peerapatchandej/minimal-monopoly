@@ -22,12 +22,18 @@ public enum CenterAreaPage
   Dice
 }
 
-public enum PlayerType
+public enum PlayerColor
 {
   Red,
   Blue,
   Yellow,
   Green
+}
+
+public enum PlayerType
+{
+  Player,
+  AI
 }
 
 public enum DiceType
@@ -37,4 +43,10 @@ public enum DiceType
   D8 = 8,
   D10 = 10,
   D12 = 12
+}
+
+public struct SelectedPlayerData
+{
+  public int Index;
+  public PlayerType Type;
 }

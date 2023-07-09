@@ -31,7 +31,7 @@ public class UICreateRoom : MonoBehaviour
   [SerializeField]
   private Button back = default;
 
-  private List<int> playerSlotIndexes = new List<int>();
+  private List<SelectedPlayerData> playerSlotIndexes = new List<SelectedPlayerData>();
   private int playerCount = 0;
 
   public void Setup(ResourceLoader resourceLoader, Action onCreateMainMenu, Action<Monopoly.State> onLoadGameScene)
@@ -42,23 +42,27 @@ public class UICreateRoom : MonoBehaviour
       {
         playerCount++;
         UpdateStartButton();
-        playerSlotIndexes.Add(index);
+        playerSlotIndexes.Add(new SelectedPlayerData { Index = index, Type = PlayerType.Player });
       }, (index) =>
       {
         playerCount++;
         UpdateStartButton();
+        playerSlotIndexes.Add(new SelectedPlayerData { Index = index, Type = PlayerType.AI });
       }, (index) =>
       {
         playerCount--;
         UpdateStartButton();
-        playerSlotIndexes.Remove(index);
+
+        int foundedIndex = playerSlotIndexes.FindIndex(x => x.Index == index);
+        if (foundedIndex != -1) playerSlotIndexes.RemoveAt(foundedIndex);
       });
     }
 
     startGame.interactable = false;
     startGame.onClick.AddListener(() =>
     {
-      playerSlotIndexes.Sort();
+      playerSlotIndexes.Sort((x, y) => x.Index.CompareTo(y.Index));
+
       onLoadGameScene?.Invoke(new Monopoly.State
       {
         ResourceLoader = resourceLoader,

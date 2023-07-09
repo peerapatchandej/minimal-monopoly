@@ -16,13 +16,13 @@ public class PlayerController : MonoBehaviour
   [SerializeField]
   private Image image = default;
 
-  public PlayerType playerType { get; private set; }
+  public PlayerColor playerType { get; private set; }
   public int conerIndex { get; private set; }
 
   private float moveSpeed = 0.5f;
   private bool playerLose = false;
 
-  public void Setup(PlayerType playerType, int health, int index)
+  public void Setup(PlayerColor playerType, int health, int index)
   {
     this.playerType = playerType;
     this.health = health;

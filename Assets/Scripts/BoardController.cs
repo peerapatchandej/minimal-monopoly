@@ -70,7 +70,7 @@ public class BoardController : MonoBehaviour
   [SerializeField]
   private List<BoardSlot> boardSlots = new List<BoardSlot>();
 
-  public void CreateBoard(int maxEdge, int maxUpgradeSlot, int diceType, int maxDice, int playerHealth, List<int> playerSlotIndexes)
+  public void CreateBoard(int maxEdge, int maxUpgradeSlot, int diceType, int maxDice, int playerHealth, List<SelectedPlayerData> playerSlotIndexes)
   {
     RectTransform edgeRect = topEdge.GetComponent<RectTransform>();
     RectTransform pawnRect = redCorner.GetComponent<RectTransform>();
@@ -115,40 +115,40 @@ public class BoardController : MonoBehaviour
 
     this.playerHealth.Setup(playerSlotIndexes);
 
-    foreach (var index in playerSlotIndexes)
+    foreach (var data in playerSlotIndexes)
     {
       GameObject pawn = null;
       PlayerController playerController = null;
 
-      switch ((PlayerType)index)
+      switch ((PlayerColor)data.Index)
       {
-        case PlayerType.Red:
-          pawn = CreatePawn(pawns[index], redCornerObj.transform);
+        case PlayerColor.Red:
+          pawn = CreatePawn(pawns[data.Index], redCornerObj.transform);
           playerController = pawn.GetComponent<PlayerController>();
-          playerController.Setup((PlayerType)index, playerHealth, 0);
+          playerController.Setup((PlayerColor)data.Index, playerHealth, 0);
           pawn.transform.localPosition = new Vector2(pawn.transform.localPosition.x, -pawn.transform.localPosition.x);
           break;
-        case PlayerType.Blue:
-          pawn = CreatePawn(pawns[index], blueCornerObj.transform);
+        case PlayerColor.Blue:
+          pawn = CreatePawn(pawns[data.Index], blueCornerObj.transform);
           playerController = pawn.GetComponent<PlayerController>();
-          playerController.Setup((PlayerType)index, playerHealth, maxEdge + 1);
+          playerController.Setup((PlayerColor)data.Index, playerHealth, maxEdge + 1);
           pawn.transform.localPosition = new Vector2(pawn.transform.localPosition.x, pawn.transform.localPosition.x);
           break;
-        case PlayerType.Yellow:
-          pawn = CreatePawn(pawns[index], yellowCornerObj.transform);
+        case PlayerColor.Yellow:
+          pawn = CreatePawn(pawns[data.Index], yellowCornerObj.transform);
           playerController = pawn.GetComponent<PlayerController>();
-          playerController.Setup((PlayerType)index, playerHealth, (maxEdge + 1) * 2);
+          playerController.Setup((PlayerColor)data.Index, playerHealth, (maxEdge + 1) * 2);
           pawn.transform.localPosition = new Vector2(pawn.transform.localPosition.x, -pawn.transform.localPosition.x);
           break;
-        case PlayerType.Green:
-          pawn = CreatePawn(pawns[index], greenCornerObj.transform);
+        case PlayerColor.Green:
+          pawn = CreatePawn(pawns[data.Index], greenCornerObj.transform);
           playerController = pawn.GetComponent<PlayerController>();
-          playerController.Setup((PlayerType)index, playerHealth, (maxEdge + 1) * 3);
+          playerController.Setup((PlayerColor)data.Index, playerHealth, (maxEdge + 1) * 3);
           pawn.transform.localPosition = new Vector2(pawn.transform.localPosition.x, pawn.transform.localPosition.x);
           break;
       }
 
-      this.playerHealth.SetHealth(index, playerHealth);
+      this.playerHealth.SetHealth(data.Index, playerHealth);
     }
 
     for (int i = 0; i < maxDice; i++)
@@ -176,18 +176,18 @@ public class BoardController : MonoBehaviour
 
   public void SetBorderColor(int index)
   {
-    switch ((PlayerType)index)
+    switch ((PlayerColor)index)
     {
-      case PlayerType.Red:
+      case PlayerColor.Red:
         borderImage.color = Const.RED_COLOR;
         break;
-      case PlayerType.Blue:
+      case PlayerColor.Blue:
         borderImage.color = Const.BLUE_COLOR;
         break;
-      case PlayerType.Yellow:
+      case PlayerColor.Yellow:
         borderImage.color = Const.YELLOW_COLOR;
         break;
-      case PlayerType.Green:
+      case PlayerColor.Green:
         borderImage.color = Const.GREEN_COLOR;
         break;
     }

@@ -14,7 +14,7 @@ public class Monopoly : MonoBehaviour
   public struct State
   {
     public ResourceLoader ResourceLoader;
-    public List<int> PlayerSlotIndexes;
+    public List<SelectedPlayerData> PlayerSlotIndexes;
     public int PlayerHealth;
     public int MaxEdge;
     public int MaxUpgradeSlot;
@@ -49,7 +49,7 @@ public class Monopoly : MonoBehaviour
   private bool rollComplete = false;
   private bool moveNextComplete = false;
 
-  private List<PlayerType> scoreList = new List<PlayerType>();
+  private List<PlayerColor> scoreList = new List<PlayerColor>();
 
   public static void LoadScene(State state)
   {
@@ -166,7 +166,7 @@ public class Monopoly : MonoBehaviour
     //order by red blue yellow green [Animation]
     while (rollCount < state.PlayerSlotIndexes.Count)
     {
-      boardCtrl.SetBorderColor(state.PlayerSlotIndexes[rollCount]);
+      boardCtrl.SetBorderColor(state.PlayerSlotIndexes[rollCount].Index);
       complete = false;
 
       RollDice((result) =>

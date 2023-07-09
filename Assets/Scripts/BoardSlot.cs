@@ -30,7 +30,10 @@ public class BoardSlot : MonoBehaviour
 
   private List<Image> upgradeSlots = new List<Image>();
 
+  [SerializeField] //temporary
   private int playerUpgrade = -1;
+
+  [SerializeField] //temporary
   private int upgradeCount = 0;
 
   public void SetupUpdateSlot(int maxSlot)

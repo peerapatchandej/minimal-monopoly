@@ -8,11 +8,11 @@ public class PlayerHealth : MonoBehaviour
   [SerializeField]
   private TextMeshProUGUI[] healthText = default;
 
-  public void Setup(List<int> playerSlotIndex)
+  public void Setup(List<SelectedPlayerData> playerSlotIndex)
   {
     for (int i = 0; i < playerSlotIndex.Count; i++)
     {
-      healthText[playerSlotIndex[i]].gameObject.SetActive(true);
+      healthText[playerSlotIndex[i].Index].gameObject.SetActive(true);
     }
   }
 
