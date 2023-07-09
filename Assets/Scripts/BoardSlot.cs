@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,9 @@ public class BoardSlot : MonoBehaviour
 
   [SerializeField]
   private Transform upgradeParent = default;
+
+  [SerializeField]
+  private Image background = default;
 
   [SerializeField]  //temporary
   private int ownedCenterSlotIndex = -1;
@@ -159,5 +163,32 @@ public class BoardSlot : MonoBehaviour
   {
     if (type == OwnedSlotType.Center) ownedCenterSlotIndex = playerIndex;
     else ownedSlotIndex[(int)type] = playerIndex;
+  }
+
+  public void ChangeColor(PlayerColor playerColor)
+  {
+    switch (playerColor)
+    {
+      case PlayerColor.Red:
+        background.DOColor(Const.RED_COLOR, 0.01f);
+        break;
+      case PlayerColor.Blue:
+        background.DOColor(Const.BLUE_COLOR, 0.01f);
+        break;
+      case PlayerColor.Yellow:
+        background.DOColor(Const.YELLOW_COLOR, 0.01f);
+        break;
+      case PlayerColor.Green:
+        background.DOColor(Const.GREEN_COLOR, 0.01f);
+        break;
+    }
+
+    StartCoroutine(Delay(0.1f, () => { background.DOColor(Color.white, 0.01f); }));
+  }
+
+  private IEnumerator Delay(float delay, Action callback)
+  {
+    yield return new WaitForSeconds(delay);
+    callback?.Invoke();
   }
 }

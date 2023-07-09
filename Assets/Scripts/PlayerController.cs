@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
   public PlayerType playerType { get; private set; }
   public int conerIndex { get; private set; }
 
-  private float moveSpeed = 0.5f;
+  private float moveSpeed = 0.3f;
   private bool playerLose = false;
 
   public void Setup(PlayerColor playerColor, PlayerType playerType, int health, int index)

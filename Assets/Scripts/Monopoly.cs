@@ -323,6 +323,8 @@ public class Monopoly : MonoBehaviour
     {
       playerCtrl.Move(nextIndex, position, () =>
       {
+        boardSlot.ChangeColor(playerCtrl.playerColor);
+
         diceResult--;
 
         if (diceResult == 0)
