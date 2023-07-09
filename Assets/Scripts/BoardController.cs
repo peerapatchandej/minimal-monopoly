@@ -244,4 +244,17 @@ public class BoardController : MonoBehaviour
       if (slot.CheckOwner(index)) slot.ResetUpgradeSlot();
     }
   }
+
+  public int GetHighUpgradeWithExclude(int playerIndex)
+  {
+    int count = 0;
+
+    foreach (var slot in boardSlots)
+    {
+      if (slot.CheckOwner(playerIndex)) continue;
+      if (slot.GetUpgradeCount() > count) count = slot.GetUpgradeCount();
+    }
+
+    return count;
+  }
 }

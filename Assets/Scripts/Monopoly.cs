@@ -350,7 +350,7 @@ public class Monopoly : MonoBehaviour
               }
               else if (playerCtrl.playerType == PlayerType.AI)
               {
-                if (playerCtrl.GetHealth() > 1)
+                if (playerCtrl.GetHealth() > 2 && boardCtrl.GetHighUpgradeWithExclude((int)playerCtrl.playerColor) < playerCtrl.GetHealth())
                 {
                   playerCtrl.UpgradeSlot();
                   boardSlot.UpgradeSlot((int)playerCtrl.playerColor);
