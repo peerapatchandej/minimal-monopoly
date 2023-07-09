@@ -237,44 +237,52 @@ public class Monopoly : MonoBehaviour
             }
 
             boardCtrl.SetHealth((int)playerCtrl.playerType, playerCtrl.GetHealth());
+            onComplete?.Invoke();
           }
           else if (boardSlot.GetBoardType() == BoardType.Edge)
           {
+            Action onBuyArea = () =>
+            {
+              boardAction.EnableBuyArea(() =>
+              {
+                boardSlot.UpgradeSlot((int)playerCtrl.playerType);
+              }, () =>
+              {
+                onComplete?.Invoke();
+              });
+            };
+
             if (!boardSlot.SlotHasUpgrade())
             {
-              //enable buy area
-              //boardSlot.UpgradeSlot(currentTurn);
+              onBuyArea.Invoke();
             }
             else
             {
-              if (boardSlot.CheckOwner(currentTurn))
+              if (boardSlot.CheckOwner((int)playerCtrl.playerType))
               {
                 if (boardSlot.CanUpgradeArea())
                 {
-                  //enable buy area
+                  onBuyArea.Invoke();
                 }
                 else
                 {
-                  //auto turn end
+                  onComplete?.Invoke();
                 }
-
-                //boardSlot.UpgradeSlot(currentTurn);
               }
               else
               {
                 //TakeDamage
                 Debug.Log("Take Damage");
                 //boardSlot.ResetUpgradeSlot();
+                onComplete?.Invoke();
               }
             }
           }
-
-          //Action upgrade
-          //check is corner then heal
-          //else select upgrade or take damage
         }
-
-        onComplete?.Invoke();
+        else
+        {
+          onComplete?.Invoke();
+        }
       });
     }, (otherPlayer) =>
     {

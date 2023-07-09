@@ -10,23 +10,27 @@ public class BoardAction : MonoBehaviour
   private DiceController DicePage = default;
 
   [SerializeField]
-  private GameObject[] pages = default;
+  private BuyAreaController BuyAreaPage = default;
+
+  //[SerializeField]
+  //private GameObject[] pages = default;
 
   public void EnableDicePage(Action<int> callback)
   {
-    if (DicePage)
-    {
-      DicePage.Setup(callback);
-    }
-
-    EnableDicePage(CenterAreaPage.Dice);
+    DicePage.Setup(callback);
+    //DicePage.gameObject.SetActive(true);
   }
 
-  private void EnableDicePage(CenterAreaPage page)
+  public void EnableBuyArea(Action onBuyArea, Action onTurnEnd)
   {
-    for (int i = 0; i < pages.Length; i++)
-    {
-      if (pages[i] != null) pages[i].SetActive((int)page == i);
-    }
+    BuyAreaPage.Setup(onBuyArea, onTurnEnd);
   }
+
+  //private void EnableDicePage(CenterAreaPage page)
+  //{
+  //  for (int i = 0; i < pages.Length; i++)
+  //  {
+  //    if (pages[i] != null) pages[i].SetActive((int)page == i);
+  //  }
+  //}
 }

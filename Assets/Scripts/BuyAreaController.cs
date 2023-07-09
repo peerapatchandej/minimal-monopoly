@@ -14,22 +14,32 @@ public class BuyAreaController : MonoBehaviour
 
   private void Awake()
   {
-    buyArea.gameObject.SetActive(false);
-    turnEnd.gameObject.SetActive(false);
+    EnableButton(false);
   }
 
-  public void Setup(bool owned, bool canBuy, Action onBuyArea, Action onTurnEnd)
+  public void Setup(Action onBuyArea, Action onTurnEnd)
   {
-    buyArea.gameObject.SetActive(canBuy);
+    EnableButton(true);
 
     buyArea.onClick.RemoveAllListeners();
     buyArea.onClick.AddListener(() =>
     {
-      buyArea.gameObject.SetActive(false);
-      turnEnd.gameObject.SetActive(false);
-
+      EnableButton(false);
       onBuyArea?.Invoke();
       onTurnEnd?.Invoke();
     });
+
+    turnEnd.onClick.RemoveAllListeners();
+    turnEnd.onClick.AddListener(() =>
+    {
+      EnableButton(false);
+      onTurnEnd?.Invoke();
+    });
+  }
+
+  private void EnableButton(bool value)
+  {
+    buyArea.gameObject.SetActive(value);
+    turnEnd.gameObject.SetActive(value);
   }
 }

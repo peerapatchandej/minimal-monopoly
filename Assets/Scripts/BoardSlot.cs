@@ -38,7 +38,7 @@ public class BoardSlot : MonoBehaviour
     for (int i = 0; i < maxSlot; i++)
     {
       GameObject slot = Instantiate(upgradeSlotObj, upgradeParent);
-      upgradeSlots.Add(slot.GetComponent<Image>());
+      upgradeSlots.Add(slot.transform.GetChild(0).GetComponent<Image>());
     }
   }
 
@@ -97,7 +97,7 @@ public class BoardSlot : MonoBehaviour
 
   public bool CanUpgradeArea()
   {
-    return upgradeCount >= upgradeSlots.Count;
+    return upgradeCount < upgradeSlots.Count;
   }
 
   public void UpgradeSlot(int playerIndex)
