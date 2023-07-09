@@ -10,6 +10,9 @@ public class Dice : MonoBehaviour
   [SerializeField]
   private GameObject[] diceSides = default;
 
+  [SerializeField]
+  private float rotateSpeed = 500f;
+
   private int result;
   private bool stopRoll = false;
 
@@ -19,6 +22,11 @@ public class Dice : MonoBehaviour
     {
       diceSides[i].SetActive(false);
     }
+  }
+
+  private void Update()
+  {
+    if (!stopRoll) transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, transform.localEulerAngles.z + (rotateSpeed * Time.deltaTime));
   }
 
   public void RollDice()
