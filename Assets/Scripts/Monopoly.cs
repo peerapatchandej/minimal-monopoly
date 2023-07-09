@@ -404,6 +404,7 @@ public class Monopoly : MonoBehaviour
               {
                 //TakeDamage
                 UpdateHealth(playerCtrl, -boardSlot.GetUpgradeCount());
+                playerCtrl.TakeDamage();
                 boardSlot.ResetUpgradeSlot();
                 onComplete?.Invoke();
               }
