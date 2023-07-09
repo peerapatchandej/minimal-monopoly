@@ -27,7 +27,7 @@ public class Monopoly : MonoBehaviour
   private BoardController boardCtrl = default;
 
   [SerializeField]
-  private CenterArea centerArea = default;
+  private BoardAction boardAction = default;
 
   [SerializeField]
   private Transform pawnParent = default;
@@ -190,7 +190,7 @@ public class Monopoly : MonoBehaviour
 
   private void RollDice(Action<int> callback)
   {
-    if (centerArea) centerArea.EnableDicePage(callback);
+    if (boardAction) boardAction.EnableDicePage(callback);
   }
 
   private void MoveNextSlot(Action onComplete = null)

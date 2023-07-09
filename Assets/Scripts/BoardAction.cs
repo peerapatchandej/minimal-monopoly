@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class CenterArea : MonoBehaviour
+public class BoardAction : MonoBehaviour
 {
   [SerializeField]
   private DiceController DicePage = default;
