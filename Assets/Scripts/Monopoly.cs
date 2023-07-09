@@ -49,6 +49,8 @@ public class Monopoly : MonoBehaviour
   private bool rollComplete = false;
   private bool moveNextComplete = false;
 
+  private List<PlayerType> scoreList = new List<PlayerType>();
+
   public static void LoadScene(State state)
   {
     UnityAction<Scene, LoadSceneMode> onLoaded = null;
@@ -96,8 +98,14 @@ public class Monopoly : MonoBehaviour
     {
       if (playerCtrls[currentTurn].PlayerLose())
       {
-        //check from leaderboard list if count of leaderboard == max player - 1 then game end
         currentTurn++;
+        if (currentTurn >= state.PlayerSlotIndexes.Count) currentTurn = 0;
+      }
+      if (scoreList.Count == state.PlayerSlotIndexes.Count - 1)
+      {
+        scoreList.Add(playerCtrls[currentTurn].playerType);
+        scoreList.Reverse();
+        break;
       }
 
       rollComplete = false;
@@ -126,6 +134,8 @@ public class Monopoly : MonoBehaviour
       currentTurn++;
       if (currentTurn >= state.PlayerSlotIndexes.Count) currentTurn = 0;
     }
+
+    // show result dialog
   }
 
   private IEnumerator SetupPlayer()
@@ -332,6 +342,8 @@ public class Monopoly : MonoBehaviour
       BoardSlot boardSlot = boardCtrl.GetBoardSlot(playerCtrl.currentIndex);
       boardSlot.ClearOwnedSlot(currentTurn);
       boardCtrl.ClearAllBuyAreaWithPlayer((int)playerCtrl.playerType);
+
+      scoreList.Add(playerCtrl.playerType);
     });
 
     boardCtrl.SetHealth((int)playerCtrl.playerType, playerCtrl.GetHealth());
