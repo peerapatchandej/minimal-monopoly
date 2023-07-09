@@ -318,6 +318,10 @@ public class Monopoly : MonoBehaviour
                   UpdateHealth(playerCtrl, -Const.COST_BUY_AREA);
                   onComplete?.Invoke();
                 }
+                else
+                {
+                  onComplete?.Invoke();
+                }
               }
             };
 
