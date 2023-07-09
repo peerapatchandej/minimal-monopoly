@@ -110,7 +110,6 @@ public class Monopoly : MonoBehaviour
         MoveNextSlot(() =>
         {
           moveNextComplete = true;
-          diceResult--;
         });
 
         yield return new WaitUntil(() => moveNextComplete);
@@ -216,7 +215,8 @@ public class Monopoly : MonoBehaviour
     {
       playerCtrl.Move(nextIndex, position, () =>
       {
-        onComplete?.Invoke();
+        diceResult--;
+
         if (diceResult == 0)
         {
           //Clear old owned slot
@@ -240,29 +240,41 @@ public class Monopoly : MonoBehaviour
           }
           else if (boardSlot.GetBoardType() == BoardType.Edge)
           {
-            //if (!boardSlot.SlotHasUpgrade())
-            //{
-            //  boardSlot.UpgradeSlot(currentTurn);
-            //}
-            //else
-            //{
-            //  if (boardSlot.CheckOwner(currentTurn))
-            //  {
-            //    boardSlot.UpgradeSlot(currentTurn);
-            //  }
-            //  else
-            //  {
-            //    Debug.Log("Take Damage");
-            //    boardSlot.ResetUpgradeSlot();
-            //    //TakeDamage
-            //  }
-            //}
+            if (!boardSlot.SlotHasUpgrade())
+            {
+              //enable buy area
+              //boardSlot.UpgradeSlot(currentTurn);
+            }
+            else
+            {
+              if (boardSlot.CheckOwner(currentTurn))
+              {
+                if (boardSlot.CanUpgradeArea())
+                {
+                  //enable buy area
+                }
+                else
+                {
+                  //auto turn end
+                }
+
+                //boardSlot.UpgradeSlot(currentTurn);
+              }
+              else
+              {
+                //TakeDamage
+                Debug.Log("Take Damage");
+                //boardSlot.ResetUpgradeSlot();
+              }
+            }
           }
 
           //Action upgrade
           //check is corner then heal
           //else select upgrade or take damage
         }
+
+        onComplete?.Invoke();
       });
     }, (otherPlayer) =>
     {

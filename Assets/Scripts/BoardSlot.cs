@@ -95,6 +95,11 @@ public class BoardSlot : MonoBehaviour
     }
   }
 
+  public bool CanUpgradeArea()
+  {
+    return upgradeCount >= upgradeSlots.Count;
+  }
+
   public void UpgradeSlot(int playerIndex)
   {
     if (upgradeCount >= upgradeSlots.Count)
