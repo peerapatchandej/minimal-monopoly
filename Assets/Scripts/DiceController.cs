@@ -55,4 +55,30 @@ public class DiceController : MonoBehaviour
       callback?.Invoke(result);
     });
   }
+
+  public IEnumerator SetupAI(Action<int> callback)
+  {
+    result = 0;
+    resultObj.SetActive(false);
+    stop.gameObject.SetActive(false);
+
+    for (int i = 0; i < dices.childCount - 2; i++)
+    {
+      Dice dice = dices.GetChild(i).GetComponent<Dice>();
+      dice.RollDice();
+    }
+
+    yield return new WaitForSeconds(1f);
+
+    for (int i = 0; i < dices.childCount - 2; i++)
+    {
+      Dice dice = dices.GetChild(i).GetComponent<Dice>();
+      result += dice.StopRoll();
+    }
+
+    resultText.text = result.ToString();
+    resultObj.SetActive(true);
+
+    callback?.Invoke(result);
+  }
 }

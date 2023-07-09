@@ -125,25 +125,25 @@ public class BoardController : MonoBehaviour
         case PlayerColor.Red:
           pawn = CreatePawn(pawns[data.Index], redCornerObj.transform);
           playerController = pawn.GetComponent<PlayerController>();
-          playerController.Setup((PlayerColor)data.Index, playerHealth, 0);
+          playerController.Setup((PlayerColor)data.Index, data.Type, playerHealth, 0);
           pawn.transform.localPosition = new Vector2(pawn.transform.localPosition.x, -pawn.transform.localPosition.x);
           break;
         case PlayerColor.Blue:
           pawn = CreatePawn(pawns[data.Index], blueCornerObj.transform);
           playerController = pawn.GetComponent<PlayerController>();
-          playerController.Setup((PlayerColor)data.Index, playerHealth, maxEdge + 1);
+          playerController.Setup((PlayerColor)data.Index, data.Type, playerHealth, maxEdge + 1);
           pawn.transform.localPosition = new Vector2(pawn.transform.localPosition.x, pawn.transform.localPosition.x);
           break;
         case PlayerColor.Yellow:
           pawn = CreatePawn(pawns[data.Index], yellowCornerObj.transform);
           playerController = pawn.GetComponent<PlayerController>();
-          playerController.Setup((PlayerColor)data.Index, playerHealth, (maxEdge + 1) * 2);
+          playerController.Setup((PlayerColor)data.Index, data.Type, playerHealth, (maxEdge + 1) * 2);
           pawn.transform.localPosition = new Vector2(pawn.transform.localPosition.x, -pawn.transform.localPosition.x);
           break;
         case PlayerColor.Green:
           pawn = CreatePawn(pawns[data.Index], greenCornerObj.transform);
           playerController = pawn.GetComponent<PlayerController>();
-          playerController.Setup((PlayerColor)data.Index, playerHealth, (maxEdge + 1) * 3);
+          playerController.Setup((PlayerColor)data.Index, data.Type, playerHealth, (maxEdge + 1) * 3);
           pawn.transform.localPosition = new Vector2(pawn.transform.localPosition.x, pawn.transform.localPosition.x);
           break;
       }

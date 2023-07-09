@@ -105,19 +105,30 @@ public class Monopoly : MonoBehaviour
 
       if (scoreList.Count == state.PlayerSlotIndexes.Count - 1)
       {
-        scoreList.Add(playerCtrls[currentTurn].playerType);
+        scoreList.Add(playerCtrls[currentTurn].playerColor);
         scoreList.Reverse();
         break;
       }
 
       rollComplete = false;
-      boardCtrl.SetBorderColor((int)playerCtrls[currentTurn].playerType);
+      boardCtrl.SetBorderColor((int)playerCtrls[currentTurn].playerColor);
 
-      RollDice((result) =>
+      if (playerCtrls[currentTurn].playerType == PlayerType.Player)
       {
-        diceResult = result;
-        rollComplete = true;
-      });
+        RollDice((result) =>
+        {
+          diceResult = result;
+          rollComplete = true;
+        });
+      }
+      else if (playerCtrls[currentTurn].playerType == PlayerType.AI)
+      {
+        RollDiceAI((result) =>
+        {
+          diceResult = result;
+          rollComplete = true;
+        });
+      }
 
       yield return new WaitUntil(() => rollComplete);
 
@@ -169,7 +180,7 @@ public class Monopoly : MonoBehaviour
       boardCtrl.SetBorderColor(state.PlayerSlotIndexes[rollCount].Index);
       complete = false;
 
-      RollDice((result) =>
+      Action<int> onResult = (result) =>
       {
         Debug.Log("Dice result : " + result);
 
@@ -181,7 +192,22 @@ public class Monopoly : MonoBehaviour
 
         rollCount++;
         complete = true;
-      });
+      };
+
+      if (state.PlayerSlotIndexes[rollCount].Type == PlayerType.Player)
+      {
+        RollDice((result) =>
+        {
+          onResult.Invoke(result);
+        });
+      }
+      else if (state.PlayerSlotIndexes[rollCount].Type == PlayerType.AI)
+      {
+        RollDiceAI((result) =>
+        {
+          onResult.Invoke(result);
+        });
+      }
 
       yield return new WaitUntil(() => complete);
       yield return new WaitForSeconds(1f);
@@ -216,6 +242,11 @@ public class Monopoly : MonoBehaviour
   private void RollDice(Action<int> callback)
   {
     if (boardAction) boardAction.EnableDicePage(callback);
+  }
+
+  private void RollDiceAI(Action<int> callback)
+  {
+    if (boardAction) boardAction.EnableDicePageAI(callback);
   }
 
   private void MoveNextSlot(Action onComplete = null)
@@ -270,7 +301,7 @@ public class Monopoly : MonoBehaviour
             {
               boardAction.EnableBuyArea(() =>
               {
-                boardSlot.UpgradeSlot((int)playerCtrl.playerType);
+                boardSlot.UpgradeSlot((int)playerCtrl.playerColor);
                 UpdateHealth(playerCtrl, -Const.COST_BUY_AREA);
               }, () =>
               {
@@ -294,7 +325,7 @@ public class Monopoly : MonoBehaviour
             }
             else
             {
-              if (boardSlot.CheckOwner((int)playerCtrl.playerType))
+              if (boardSlot.CheckOwner((int)playerCtrl.playerColor))
               {
                 if (boardSlot.CanUpgradeArea())
                 {
@@ -350,11 +381,11 @@ public class Monopoly : MonoBehaviour
     {
       BoardSlot boardSlot = boardCtrl.GetBoardSlot(playerCtrl.currentIndex);
       boardSlot.ClearOwnedSlot(currentTurn);
-      boardCtrl.ClearAllBuyAreaWithPlayer((int)playerCtrl.playerType);
+      boardCtrl.ClearAllBuyAreaWithPlayer((int)playerCtrl.playerColor);
 
-      scoreList.Add(playerCtrl.playerType);
+      scoreList.Add(playerCtrl.playerColor);
     });
 
-    boardCtrl.SetHealth((int)playerCtrl.playerType, playerCtrl.GetHealth());
+    boardCtrl.SetHealth((int)playerCtrl.playerColor, playerCtrl.GetHealth());
   }
 }

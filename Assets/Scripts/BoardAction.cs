@@ -14,6 +14,11 @@ public class BoardAction : MonoBehaviour
     DicePage.Setup(callback);
   }
 
+  public void EnableDicePageAI(Action<int> callback)
+  {
+    StartCoroutine(DicePage.SetupAI(callback));
+  }
+
   public void EnableBuyArea(Action onBuyArea, Action onTurnEnd)
   {
     BuyAreaPage.Setup(onBuyArea, onTurnEnd);
