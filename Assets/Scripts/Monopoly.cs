@@ -174,7 +174,7 @@ public class Monopoly : MonoBehaviour
       if (i < state.PlayerSlotIndexes.Count)
       {
         playerCtrls.Add(playerCtrlsTemp[i]);
-        boardCtrl.GetBoardSlot(playerCtrls[playerCtrls.Count - 1].currentIndex).SetOwnedSlot(SlotType.Center, playerCtrls.Count - 1);
+        boardCtrl.GetBoardSlot(playerCtrls[playerCtrls.Count - 1].currentIndex).SetOwnedSlot(OwnedSlotType.Center, playerCtrls.Count - 1);
         i++;
         sortCount++;
       }
@@ -195,12 +195,14 @@ public class Monopoly : MonoBehaviour
 
   private void MoveNextSlot(Action onComplete = null)
   {
+    PlayerController playerCtrl = playerCtrls[currentTurn];
+
     //Clear old owned slot
-    int previousIndex = playerCtrls[currentTurn].currentIndex - 1;
+    int previousIndex = playerCtrl.currentIndex - 1;
     BoardSlot boardSlot = boardCtrl.GetBoardSlot(previousIndex >= 0 ? previousIndex : boardCtrl.GetBoardSlotCount() - 1);
     boardSlot.ClearOwnedSlot(currentTurn);
 
-    int nextIndex = playerCtrls[currentTurn].currentIndex + 1;
+    int nextIndex = playerCtrl.currentIndex + 1;
 
     //ถ้าเดินจนวนสนามแล้วจะรีเซ็ต index
     if (nextIndex >= boardCtrl.GetBoardSlotCount())
@@ -212,37 +214,54 @@ public class Monopoly : MonoBehaviour
     boardSlot = boardCtrl.GetBoardSlot(nextIndex);
     boardSlot.MoveToSlot(currentTurn, (position) =>
     {
-      playerCtrls[currentTurn].Move(nextIndex, position, () =>
+      playerCtrl.Move(nextIndex, position, () =>
       {
         onComplete?.Invoke();
         if (diceResult == 0)
         {
           //Clear old owned slot
-          previousIndex = playerCtrls[currentTurn].currentIndex - 1;
+          previousIndex = playerCtrl.currentIndex - 1;
           boardSlot = boardCtrl.GetBoardSlot(previousIndex >= 0 ? previousIndex : boardCtrl.GetBoardSlotCount() - 1);
           boardSlot.ClearOwnedSlot(currentTurn);
+
+          boardSlot = boardCtrl.GetBoardSlot(playerCtrl.currentIndex);
+          if (boardSlot.GetBoardType() == BoardType.Corner)
+          {
+            if (playerCtrl.conerIndex == playerCtrl.currentIndex)
+            {
+              playerCtrl.UpdateHealth(Const.MAX_HEAL);
+            }
+            else
+            {
+              playerCtrl.UpdateHealth(Const.NORMAL_HEAL);
+            }
+
+            boardCtrl.SetHealth((int)playerCtrl.playerType, playerCtrl.GetHealth());
+          }
+          else if (boardSlot.GetBoardType() == BoardType.Edge)
+          {
+            //if (!boardSlot.SlotHasUpgrade())
+            //{
+            //  boardSlot.UpgradeSlot(currentTurn);
+            //}
+            //else
+            //{
+            //  if (boardSlot.CheckOwner(currentTurn))
+            //  {
+            //    boardSlot.UpgradeSlot(currentTurn);
+            //  }
+            //  else
+            //  {
+            //    Debug.Log("Take Damage");
+            //    boardSlot.ResetUpgradeSlot();
+            //    //TakeDamage
+            //  }
+            //}
+          }
 
           //Action upgrade
           //check is corner then heal
           //else select upgrade or take damage
-
-          //if (!boardSlot.SlotHasUpgrade())
-          //{
-          //  boardSlot.UpgradeSlot(currentTurn);
-          //}
-          //else
-          //{
-          //  if (boardSlot.CheckOwner(currentTurn))
-          //  {
-          //    boardSlot.UpgradeSlot(currentTurn);
-          //  }
-          //  else
-          //  {
-          //    Debug.Log("Take Damage");
-          //    boardSlot.ResetUpgradeSlot();
-          //    //TakeDamage
-          //  }
-          //}
         }
       });
     }, (otherPlayer) =>

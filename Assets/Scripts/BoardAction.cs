@@ -22,11 +22,6 @@ public class BoardAction : MonoBehaviour
     EnableDicePage(CenterAreaPage.Dice);
   }
 
-  public DiceController GetDiceController()
-  {
-    return DicePage;
-  }
-
   private void EnableDicePage(CenterAreaPage page)
   {
     for (int i = 0; i < pages.Length; i++)

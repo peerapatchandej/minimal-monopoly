@@ -18,4 +18,7 @@ public class Const
   public static readonly int MIN_PLAYER = 2;
   public static readonly int DEFAULT_EDGE = 4;
   public static readonly int DEFAULT_HEALTH = 9;
+
+  public static readonly int MAX_HEAL = 3;
+  public static readonly int NORMAL_HEAL = 1;
 }

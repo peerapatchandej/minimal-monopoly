@@ -13,12 +13,15 @@ public class PlayerController : MonoBehaviour
   private int health = Const.DEFAULT_HEALTH;
 
   public PlayerType playerType { get; private set; }
+  public int conerIndex { get; private set; }
+
   private float moveSpeed = 0.5f;
 
   public void Setup(PlayerType playerType, int health, int index)
   {
     this.playerType = playerType;
     this.health = health;
+    conerIndex = index;
     SetIndex(index);
   }
 
@@ -29,6 +32,16 @@ public class PlayerController : MonoBehaviour
     {
       onComplete?.Invoke();
     });
+  }
+
+  public void UpdateHealth(int health)
+  {
+    this.health += health;
+  }
+
+  public int GetHealth()
+  {
+    return health;
   }
 
   private void SetIndex(int index)

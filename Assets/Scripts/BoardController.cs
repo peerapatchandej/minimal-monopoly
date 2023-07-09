@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -230,5 +231,10 @@ public class BoardController : MonoBehaviour
   public int GetBoardSlotCount()
   {
     return boardSlots.Count;
+  }
+
+  public void SetHealth(int index, int health)
+  {
+    playerHealth.SetHealth(index, health);
   }
 }

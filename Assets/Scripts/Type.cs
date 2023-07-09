@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct SlotData
+public enum BoardType
 {
-  public Vector2 Position;
-  public SlotType SlotType;
+  Corner,
+  Edge
 }
 
-public enum SlotType
+public enum OwnedSlotType
 {
   One = 0,
   Two,

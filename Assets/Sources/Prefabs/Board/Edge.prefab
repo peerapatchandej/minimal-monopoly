@@ -157,6 +157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd8e30b32c1e8644eaa7f33c12a0f955, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 1
   centerSlot: {fileID: 6541589592773716769}
   slots:
   - {fileID: 6405390522434879274}

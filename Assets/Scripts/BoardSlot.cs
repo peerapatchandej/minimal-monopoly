@@ -8,6 +8,9 @@ using UnityEngine.UI;
 public class BoardSlot : MonoBehaviour
 {
   [SerializeField]
+  private BoardType type = default;
+
+  [SerializeField]
   private Transform centerSlot = default;
 
   [SerializeField]
@@ -20,14 +23,14 @@ public class BoardSlot : MonoBehaviour
   private Transform upgradeParent = default;
 
   [SerializeField]  //temporary
-  private int ownedCenterSlotIndex = -1;                         //Player's index owned center slot
+  private int ownedCenterSlotIndex = -1;
 
   [SerializeField]  //temporary
-  private int[] ownedSlotIndex = new int[] { -1, -1, -1, -1 };   //Player's index owned these slot
+  private int[] ownedSlotIndex = new int[] { -1, -1, -1, -1 };
 
   private List<Image> upgradeSlots = new List<Image>();
 
-  private int playerUpgrade = -1; //Player's index
+  private int playerUpgrade = -1;
   private int upgradeCount = 0;
 
   public void SetupUpdateSlot(int maxSlot)
@@ -52,7 +55,7 @@ public class BoardSlot : MonoBehaviour
 
       if (isEmpty)
       {
-        SetOwnedSlot(SlotType.Center, playerIndex);
+        SetOwnedSlot(OwnedSlotType.Center, playerIndex);
         onMove?.Invoke(centerSlot.position);
       }
       else
@@ -72,7 +75,7 @@ public class BoardSlot : MonoBehaviour
     {
       if (ownedSlotIndex[i] == -1)
       {
-        SetOwnedSlot((SlotType)i, playerIndex);
+        SetOwnedSlot((OwnedSlotType)i, playerIndex);
         onMove?.Invoke(slots[i].position);
         break;
       }
@@ -134,9 +137,14 @@ public class BoardSlot : MonoBehaviour
     }
   }
 
-  public void SetOwnedSlot(SlotType type, int playerIndex)
+  public BoardType GetBoardType()
   {
-    if (type == SlotType.Center) ownedCenterSlotIndex = playerIndex;
+    return type;
+  }
+
+  public void SetOwnedSlot(OwnedSlotType type, int playerIndex)
+  {
+    if (type == OwnedSlotType.Center) ownedCenterSlotIndex = playerIndex;
     else ownedSlotIndex[(int)type] = playerIndex;
   }
 }
