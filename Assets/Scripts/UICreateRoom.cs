@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UICreateRoom : MonoBehaviour
@@ -33,7 +34,7 @@ public class UICreateRoom : MonoBehaviour
   private List<int> playerSlotIndexes = new List<int>();
   private int playerCount = 0;
 
-  public void Setup(Action OnCreateMainMenu, Action<Monopoly.State> onLoadGameScene)
+  public void Setup(Action onCreateMainMenu, Action<Monopoly.State> onLoadGameScene)
   {
     foreach (var slot in playerSlots)
     {
@@ -65,13 +66,17 @@ public class UICreateRoom : MonoBehaviour
         MaxEdge = edgeSetting.GetValue(),
         MaxUpgradeSlot = upgradeSlotSetting.GetValue(),
         DiceType = diceTypeSetting.GetValue(),
-        MaxDice = diceSetting.GetValue()
+        MaxDice = diceSetting.GetValue(),
+        OnLoadSceneMainMenu = () =>
+        {
+          SceneManager.LoadScene("MainMenu");
+        }
       });
     });
 
     back.onClick.AddListener(() =>
     {
-      OnCreateMainMenu?.Invoke();
+      onCreateMainMenu?.Invoke();
       back.interactable = false;
       Destroy(gameObject);
     });

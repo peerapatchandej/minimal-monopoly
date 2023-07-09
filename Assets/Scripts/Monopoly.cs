@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using Unity.VisualScripting;
 using System.Numerics;
+using UnityEngine.UI;
 
 public class Monopoly : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class Monopoly : MonoBehaviour
     public int MaxUpgradeSlot;
     public int DiceType;
     public int MaxDice;
+    public Action OnLoadSceneMainMenu;
   }
 
   [SerializeField]
@@ -29,6 +31,9 @@ public class Monopoly : MonoBehaviour
 
   [SerializeField]
   private Transform pawnParent = default;
+
+  [SerializeField]
+  private Button back = default;
 
   [SerializeField]
   private List<PlayerController> playerCtrls = new List<PlayerController>();
@@ -69,6 +74,12 @@ public class Monopoly : MonoBehaviour
     {
       boardCtrl.CreateBoard(state.MaxEdge, state.MaxUpgradeSlot, state.DiceType, state.MaxDice, state.PlayerHealth, state.PlayerSlotIndexes);
     };
+
+    back.onClick.AddListener(() =>
+    {
+      state.OnLoadSceneMainMenu?.Invoke();
+      back.interactable = false;
+    });
   }
 
   private IEnumerator Start()
@@ -211,8 +222,6 @@ public class Monopoly : MonoBehaviour
           boardSlot = boardCtrl.GetBoardSlot(previousIndex >= 0 ? previousIndex : boardCtrl.GetBoardSlotCount() - 1);
           boardSlot.ClearOwnedSlot(currentTurn);
 
-          //Debug.Log($"currentIndex : {playerCtrls[playerTurn].currentIndex}");
-
           //Action upgrade
           //check is corner then heal
           //else select upgrade or take damage
@@ -238,7 +247,6 @@ public class Monopoly : MonoBehaviour
       });
     }, (otherPlayer) =>
     {
-      Debug.Log("otherPlayer " + otherPlayer);
       MoveSwapInSlot(otherPlayer, () =>
       {
         MoveNextSlot(onComplete);
