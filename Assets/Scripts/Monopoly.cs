@@ -100,6 +100,13 @@ public class Monopoly : MonoBehaviour
       {
         currentTurn++;
         if (currentTurn >= state.PlayerSlotIndexes.Count) currentTurn = 0;
+
+        while (playerCtrls[currentTurn].PlayerLose())
+        {
+          currentTurn++;
+          if (currentTurn >= state.PlayerSlotIndexes.Count) currentTurn = 0;
+          yield return new WaitForEndOfFrame();
+        }
       }
       if (scoreList.Count == state.PlayerSlotIndexes.Count - 1)
       {
