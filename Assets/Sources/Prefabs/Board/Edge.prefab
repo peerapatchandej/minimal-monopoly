@@ -129,6 +129,7 @@ MonoBehaviour:
   upgradeSlotObj: {fileID: 5194054566001194797, guid: bdaeacf5c671a194785702a44d488472, type: 3}
   upgradeParent: {fileID: 2419318521127628191}
   background: {fileID: 7500150737243255981}
+  outline: {fileID: 4397052790862354490}
   ownedCenterSlotIndex: -1
   ownedSlotIndex: ffffffffffffffffffffffffffffffff
   playerUpgrade: -1

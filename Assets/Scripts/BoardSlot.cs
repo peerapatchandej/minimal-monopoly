@@ -26,6 +26,9 @@ public class BoardSlot : MonoBehaviour
   [SerializeField]
   private Image background = default;
 
+  [SerializeField]
+  private Image outline = default;
+
   [SerializeField]  //temporary
   private int ownedCenterSlotIndex = -1;
 
@@ -125,6 +128,8 @@ public class BoardSlot : MonoBehaviour
 
     upgradeSlots[upgradeCount].color = color;
     upgradeCount++;
+
+    outline.DOColor(color, 1f);
   }
 
   //for check take damage and owner
@@ -147,6 +152,8 @@ public class BoardSlot : MonoBehaviour
     {
       slot.color = Color.white;
     }
+
+    outline.DOColor(Const.GRAY_COLOR, 1f);
   }
 
   public int GetUpgradeCount()
